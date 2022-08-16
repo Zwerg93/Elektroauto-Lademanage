@@ -102,5 +102,8 @@
       }
     }
   },
-  "defaultProject": "flexloggerFE"
+  "defaultProject": "flexloggerFE",
+  "cli": {
+    "analytics": false
+  }
 }

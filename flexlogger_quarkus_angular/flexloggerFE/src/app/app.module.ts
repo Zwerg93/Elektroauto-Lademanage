@@ -16,7 +16,7 @@ import {GoogleChartsModule} from "angular-google-charts";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GoogleChartsModule
+    GoogleChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
