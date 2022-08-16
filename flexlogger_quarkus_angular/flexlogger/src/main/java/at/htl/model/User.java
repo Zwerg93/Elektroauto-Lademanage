@@ -10,7 +10,6 @@ public class User {
     @Id
     @GeneratedValue
     int id;
-
     @Column(length = 10)
     String username;
     String email;
