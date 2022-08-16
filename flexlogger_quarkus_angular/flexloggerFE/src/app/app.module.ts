@@ -2,12 +2,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NgxChartsModule} from "@swimlane/ngx-charts";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { LoginComponent } from './components/login/login.component';
 import {GoogleChartsModule} from "angular-google-charts";
+import {NgxChartsModule} from "@swimlane/ngx-charts";
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import {GoogleChartsModule} from "angular-google-charts";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    GoogleChartsModule,
+    GoogleChartsModule.forRoot({ version: 'chart-version' }),
     NgxChartsModule,
     BrowserAnimationsModule
   ],
@@ -26,3 +26,4 @@ import {GoogleChartsModule} from "angular-google-charts";
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

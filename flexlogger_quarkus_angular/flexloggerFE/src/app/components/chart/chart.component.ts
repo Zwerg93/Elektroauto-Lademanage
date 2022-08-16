@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { productSales, productSalesMulti} from "../../data/log";
 
 @Component({
   selector: 'app-chart',
@@ -6,8 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chart.component.css']
 })
 export class ChartComponent implements OnInit {
-  multi: any[];
-  view: any[] = [700, 300];
+  constructor() {
+    Object.assign(this, { productSalesMulti });
+  }
+
+  productSalesMulti: any[];
+  view: any[] = [700, 370];
 
   // options
   legend: boolean = true;
@@ -17,20 +22,16 @@ export class ChartComponent implements OnInit {
   yAxis: boolean = true;
   showYAxisLabel: boolean = true;
   showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Year';
-  yAxisLabel: string = 'Population';
+  xAxisLabel: string = 'Products';
+  yAxisLabel: string = 'Sales';
   timeline: boolean = true;
 
   colorScheme = {
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
+    domain: ['#704FC4', '#4B852C', '#B67A3D', '#5B6FC8', '#25706F']
   };
 
-  constructor() {
-    Object.assign(this, { multi });
-  }
-
-  onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
+  onSelect(event) {
+    console.log(event);
   }
 
   onActivate(data): void {
