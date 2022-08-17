@@ -7,7 +7,7 @@ import {BaseChartDirective} from "ng2-charts";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('pieChart') pieChart: ElementRef
