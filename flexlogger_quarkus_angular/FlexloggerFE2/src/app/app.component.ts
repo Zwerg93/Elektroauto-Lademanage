@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import * as Highcharts from "highcharts";
+import { Component } from '@angular/core';
+import {HttpService} from "./http.service";
 
 @Component({
   selector: 'app-root',
@@ -8,18 +8,17 @@ import * as Highcharts from "highcharts";
 })
 export class AppComponent {
   title = 'flexloggerFE2';
-  Highcharts = Highcharts;
-  linechart: any = {
-    series: [
-      {
-        data: [1, 2, 3],
-      },
-    ],
-    chart: {
-      type: 'line',
-    },
-    title: {
-      text: 'linechart',
-    },
-  };
+  csvLines: String[] = [];
+
+
+  constructor(private http: HttpService){
+
+  }
+
+  loadCSV(){
+    this.http.getCSV().subscribe(value => {
+      this.csvLines = value;
+      console.log(value);
+    }, error => console.log(error))
+  }
 }
