@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpService} from "../http.service";
+import {HttpService} from "../service/http.service";
+import {LogEntry} from "../model/LogEntry";
 
 @Component({
   selector: 'app-canvas-chart',
@@ -8,26 +9,31 @@ import {HttpService} from "../http.service";
 })
 export class CanvasChartComponent implements OnInit {
 
-  csvLines: String[] = [];
+  logLines: LogEntry[] = [];
+
 
   constructor(private http: HttpService){ }
 
-  loadCSV(){
-    this.http.getCSV().subscribe(value => {
-      this.csvLines = value;
-      console.log(value);
-    }, error => console.log(error))
+  loadLogEntries(){
+    this.http.getLogEntries().subscribe(value => {
+      this.logLines = value;
+      console.log(this.logLines[0].dpId);
+    }, error => console.log(error));
+    this.printIt();
   }
 
   ngOnInit(): void {
-    this.loadCSV();
+    this.loadLogEntries();
   }
 
+  printIt(){
+    this.logLines[0].dpId;
+  }
 
   chartOptions = {
     animationEnabled: true,
     title:{
-      text: "Music Album Sales by Year"
+      text: "this.logLines[0].dpId",
     },
     axisY: {
       title: "Units Sold",
@@ -37,10 +43,8 @@ export class CanvasChartComponent implements OnInit {
     data: [{
       type: "splineArea",
       color: "rgba(54,158,173,.7)",
-      xValueFormatString: "YYYY",
       dataPoints: [
-        {
-            }
+        {x: new Date(2004, 0), y: 787}
       ]
     }]
   }

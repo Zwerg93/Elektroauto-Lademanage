@@ -11,6 +11,7 @@ public class EntryLogRepository {
 
     public Set<LogTable> getAll() {
         String query = "Select * from logtable limit 10";
+        String query2 = "";
 
 
         Connection conn = null;
