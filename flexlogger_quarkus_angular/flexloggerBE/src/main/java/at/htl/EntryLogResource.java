@@ -15,15 +15,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Path("/csv")
-@Produces(MediaType.APPLICATION_JSON)
-
-
 public class EntryLogResource {
     EntryLogRepository elr = new EntryLogRepository();
     private Set<LogTable> legumes = Collections.synchronizedSet(new LinkedHashSet<>());
 
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Set<LogTable> getAll() {
         //System.out.println(elr.getAll());
         System.out.println(elr.getAll().iterator().next().dpId);
@@ -33,6 +31,7 @@ public class EntryLogResource {
 
     @GET
     @Path("/ka")
+    @Produces(MediaType.APPLICATION_JSON)
     public Set<LogTable> list() {
         legumes.add(new LogTable("Carrot", "w", "A", 1203213l));
         legumes.add(new LogTable("Carrot", "w", "A", 1203213l));

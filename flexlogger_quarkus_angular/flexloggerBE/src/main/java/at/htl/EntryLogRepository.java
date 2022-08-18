@@ -26,7 +26,9 @@ public class EntryLogRepository {
 
             while (rs.next()) {
                 logTables.add(new LogTable(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+
             }
+
 
             } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -35,8 +37,8 @@ public class EntryLogRepository {
                 if (conn != null) {
                     conn.close();
                 }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
         }
 

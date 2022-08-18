@@ -30,9 +30,9 @@ public class Connect {
             }
         }
 
-    public static void main(String[] args) {
-        EntryLogRepository elr = new EntryLogRepository();
-        elr.getAll();
-    }
+    //public static void main(String[] args) {
+      //  EntryLogRepository elr = new EntryLogRepository();
+        //elr.getAll();
+    //}
     }
 
