@@ -16,11 +16,14 @@ public class LogEntryResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public void getAll() {
-        //System.out.println(elr.getAll());
-        //System.out.println(elr.getAll().iterator().next().dpId);
-        //return elr.getAll();
-        System.out.println(elr.getAll());
+    public Set<LogEntry> getAll() {
+        return elr.getAll();
+    }
+
+    @GET
+    @Path("/csv")
+    public void getCSV() {
+        elr.getCSV();
     }
 
 

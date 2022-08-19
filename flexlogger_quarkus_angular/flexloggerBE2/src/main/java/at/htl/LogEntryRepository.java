@@ -4,14 +4,19 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.*;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 public class LogEntryRepository {
 
     private final String url = "jdbc:postgresql://developer.pi-tec.at:5432/Datamanager_SMA";
-    private final String user = "flex";
+    private final String user = "postgres";
     private final String password = "NasAmuX73";
     Statement stmt = null;
+    private Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));;
 
+    String dpName;
     /**
      * Connect to the PostgreSQL database
      *
@@ -21,7 +26,7 @@ public class LogEntryRepository {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public String getAll() {
+    public Set<LogEntry> getAll() {
         String sql = "SELECT * FROM flexlogger";
 
         try (Connection conn = connect()) {
@@ -30,13 +35,7 @@ public class LogEntryRepository {
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
-
-                String dpName = rs.getString("dp_name");
-
-                System.out.println("dp Name: " + dpName);
-
-                System.out.println();
-
+                logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
             }
 
             rs.close();
@@ -46,14 +45,37 @@ public class LogEntryRepository {
         } catch (Exception e) {
 
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-
             System.exit(0);
 
         }
 
 
         System.out.println(" Data Retrieved Successfully ..");
-        return "";
+        return logEntries;
+    }
+
+    public Set<LogEntry> getCSV() {
+        String sql = "COPY flexlogger TO '\\C:\\Users\\holzd:logtabledb.csv'  WITH DELIMITER ',' CSV HEADER;";
+
+        try (Connection conn = connect()) {
+            stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery(sql);
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (Exception e) {
+
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+
+        }
+
+
+        System.out.println(" CSV exported successfully ...");
+        return logEntries;
     }
 
 
