@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {HttpService} from "./http.service";
+import {HttpService} from "./service/http.service";
+import {LogEntry} from "./model/LogEntry";
 
 @Component({
   selector: 'app-root',
@@ -8,16 +9,16 @@ import {HttpService} from "./http.service";
 })
 export class AppComponent {
   title = 'flexloggerFE2';
-  csvLines: String[] = [];
+  logLines: LogEntry[] = [];
 
 
   constructor(private http: HttpService){
 
   }
 
-  loadCSV(){
-    this.http.getCSV().subscribe(value => {
-      this.csvLines = value;
+  loadLogEntries(){
+    this.http.getLogEntries().subscribe(value => {
+      this.logLines = value;
       console.log(value);
     }, error => console.log(error))
   }
