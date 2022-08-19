@@ -22,7 +22,7 @@ public class LogEntryRepository {
     }
 
     public String getAll() {
-        String sql = "SELECT f FROM flexlogger f";
+        String sql = "SELECT * FROM flexlogger";
 
         try (Connection conn = connect()) {
             stmt = conn.createStatement();
@@ -40,9 +40,7 @@ public class LogEntryRepository {
             }
 
             rs.close();
-
             stmt.close();
-
             conn.close();
 
         } catch (Exception e) {

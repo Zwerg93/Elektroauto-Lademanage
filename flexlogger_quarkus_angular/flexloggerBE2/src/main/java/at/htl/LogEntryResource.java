@@ -1,0 +1,27 @@
+package at.htl;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+@Path("/logEntry")
+public class LogEntryResource {
+    LogEntryRepository elr = new LogEntryRepository();
+    private Set<LogEntry> legumes = Collections.synchronizedSet(new LinkedHashSet<>());
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public void getAll() {
+        //System.out.println(elr.getAll());
+        //System.out.println(elr.getAll().iterator().next().dpId);
+        //return elr.getAll();
+        System.out.println(elr.getAll());
+    }
+
+
+}
