@@ -17,6 +17,7 @@ export class CanvasChartComponent implements OnInit {
   dataList: any = [];
   dynamicCount: number = 0;
   dynamicLogLines: LogEntry[] = [];
+  listOfDatapointNames: string[] = [];
 
   //files: { data: { color: string; dataPoints: { x: Date; y: number }[]; type: string }[]; axisY: { title: string; suffix: string; valueFormatString: string }; title: { text: string }; animationEnabled: boolean } = [];
 
@@ -27,10 +28,11 @@ export class CanvasChartComponent implements OnInit {
       //this.getPlaylists()
       this.getFiles().subscribe(file => {
         this.logLines = file;
-        this.filterLogLines();
+        this.getListOfDatapointNames();
+        this.filterLogLines("REAL173");
         this.setChartOptions();
         //this.getData();
-        this.loadDynamicData();
+        this.setTimerForNewData();
       })
     })
   }
@@ -44,19 +46,61 @@ export class CanvasChartComponent implements OnInit {
     }, error => console.log(error));
   }
 
-  loadDynamicData(){
-    timer(1000,1000).subscribe(x => {
+  loadDynamicData() {
+    this.onload();
+
+    timer(10000).subscribe(x => {
+      //this.getPlaylists()
+      this.getFiles().subscribe(file => {
+        this.logLines = file;
+        this.setChartOptions();
+        //this.getData();
+        this.setTimerForNewData();
+      })
+    })
+  }
+
+  setTimerForNewData() {
+    timer(1000, 1000).subscribe(x => {
       this.dynamicCount += 1;
       this.setChartOptions();
-      })
-    }
+    })
+    /*
+    timer(30000,30000).subscribe(x => {
+      this.loadDynamicData();
+    })*/
+  }
 
-  private filterLogLines() {
+
+  filterLogLines(filterString: String) {
+    this.dynamicLogLines = [];
     for (let logLine of this.logLines) {
-      if (logLine.dpId == "REAL173"){
+      if (logLine.dpId == filterString) {
         this.dynamicLogLines.push(logLine);
       }
     }
+  }
+
+  getListOfDatapointNames() {
+    let nameInList = false;
+    this.listOfDatapointNames = [];
+    for (let logLine of this.logLines) {
+
+      if (this.listOfDatapointNames.length == 0) {
+        this.listOfDatapointNames.push(logLine.dpId);
+      } else {
+        for (let logLineElement of this.listOfDatapointNames) {
+          if (logLineElement === logLine.dpId) {
+            nameInList = true;
+          }
+        }
+        if (nameInList == false) {
+          this.listOfDatapointNames.push(logLine.dpId);
+        }
+      }
+      nameInList = false;
+    }
+    console.log(this.listOfDatapointNames);
   }
 
 
@@ -67,7 +111,7 @@ export class CanvasChartComponent implements OnInit {
   chartOptions = {
     animationEnabled: true,
     title: {
-      text: "this.logLines[0].dpId",
+      text: "DATA IS LOADING . . .",
     },
     axisY: {
       title: "Value",
@@ -97,19 +141,39 @@ export class CanvasChartComponent implements OnInit {
       data: [{
         type: "splineArea",
         color: "rgba(54,158,173,.7)",
-        dataPoints:[
-          {x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount].value)},
-          {x: new Date(this.dynamicLogLines[this.dynamicCount+1].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount+1].value)},
-          {x: new Date(this.dynamicLogLines[this.dynamicCount+2].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount+2].value)},
-          {x: new Date(this.dynamicLogLines[this.dynamicCount+3].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount+3].value)},
-          {x: new Date(this.dynamicLogLines[this.dynamicCount+4].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount+4].value)},
-          {x: new Date(this.dynamicLogLines[this.dynamicCount+5].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount+5].value)},
-          {x: new Date(this.dynamicLogLines[this.dynamicCount+6].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount+7].value)},
+        dataPoints: [
+          {
+            x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp),
+            y: parseInt(this.dynamicLogLines[this.dynamicCount].value)
+          },
+          {
+            x: new Date(this.dynamicLogLines[this.dynamicCount + 1].timeStamp),
+            y: parseInt(this.dynamicLogLines[this.dynamicCount + 1].value)
+          },
+          {
+            x: new Date(this.dynamicLogLines[this.dynamicCount + 2].timeStamp),
+            y: parseInt(this.dynamicLogLines[this.dynamicCount + 2].value)
+          },
+          {
+            x: new Date(this.dynamicLogLines[this.dynamicCount + 3].timeStamp),
+            y: parseInt(this.dynamicLogLines[this.dynamicCount + 3].value)
+          },
+          {
+            x: new Date(this.dynamicLogLines[this.dynamicCount + 4].timeStamp),
+            y: parseInt(this.dynamicLogLines[this.dynamicCount + 4].value)
+          },
+          {
+            x: new Date(this.dynamicLogLines[this.dynamicCount + 5].timeStamp),
+            y: parseInt(this.dynamicLogLines[this.dynamicCount + 5].value)
+          },
+          {
+            x: new Date(this.dynamicLogLines[this.dynamicCount + 6].timeStamp),
+            y: parseInt(this.dynamicLogLines[this.dynamicCount + 7].value)
+          },
         ]
       }]
     }
   }
-
 
 
 }
