@@ -5,9 +5,9 @@ public class LogEntry {
     String dpId;
     String value;
     String unit;
-    Long timeStamp;
+    long timeStamp;
 
-    public LogEntry(String dpId, String value, String unit, Long timeStamp) {
+    public LogEntry(String dpId, String value, String unit, long timeStamp) {
         this.dpId = dpId;
         this.value = value;
         this.unit = unit;
@@ -38,11 +38,11 @@ public class LogEntry {
         this.unit = unit;
     }
 
-    public Long getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(Long timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
 }

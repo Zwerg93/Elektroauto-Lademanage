@@ -26,5 +26,11 @@ public class LogEntryResource {
         elr.getCSV();
     }
 
+    @GET
+    @Path("/insert")
+    public void insert() {
+        System.out.println(elr.insertLogEntry(new LogEntry("Kompressor_kk", "454","A", 1660870822)));
+    }
+
 
 }

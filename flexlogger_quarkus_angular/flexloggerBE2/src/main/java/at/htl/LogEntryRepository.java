@@ -79,7 +79,7 @@ public class LogEntryRepository {
     }
 
 
-    public long insertActor(LogEntry logEntry) {
+    public long insertLogEntry(LogEntry logEntry) {
         String SQL = "INSERT INTO flexlogger(dp_name, value, unit, timestamp) "
                 + "VALUES(?,?,?,?)";
 
@@ -91,21 +91,12 @@ public class LogEntryRepository {
 
             pstmt.setString(1, logEntry.dpId);
             pstmt.setString(2, logEntry.value);
-            pstmt.setString(1, logEntry.dpId);
-            pstmt.setString(2, logEntry.value);
+            pstmt.setString(3, logEntry.unit);
+            pstmt.setLong(4, logEntry.timeStamp);
 
-            int affectedRows = pstmt.executeUpdate();
+            pstmt.executeUpdate();
             // check the affected rows
-            if (affectedRows > 0) {
-                // get the ID back
-                try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        id = rs.getLong(1);
-                    }
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
