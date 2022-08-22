@@ -18,19 +18,21 @@ export class CanvasChartComponent implements OnInit {
   dynamicCount: number = 0;
   dynamicLogLines: LogEntry[] = [];
   listOfDatapointNames: string[] = [];
+  showChart: Boolean = false;
 
   //files: { data: { color: string; dataPoints: { x: Date; y: number }[]; type: string }[]; axisY: { title: string; suffix: string; valueFormatString: string }; title: { text: string }; animationEnabled: boolean } = [];
 
   constructor(private http: HttpService) {
     this.onload();
 
-    timer(10000).subscribe(x => {
+    timer(1000).subscribe(x => {
       //this.getPlaylists()
       this.getFiles().subscribe(file => {
         this.logLines = file;
         this.getListOfDatapointNames();
         this.filterLogLines("REAL173");
         this.setChartOptions();
+        this.showChart = true;
         //this.getData();
         this.setTimerForNewData();
       })
@@ -73,6 +75,7 @@ export class CanvasChartComponent implements OnInit {
 
 
   filterLogLines(filterString: String) {
+    this.dynamicCount = 0;
     this.dynamicLogLines = [];
     for (let logLine of this.logLines) {
       if (logLine.dpId == filterString) {
@@ -115,7 +118,6 @@ export class CanvasChartComponent implements OnInit {
     },
     axisY: {
       title: "Value",
-      valueFormatString: "#0,,.",
       suffix: "M"
     },
     data: [{
@@ -135,9 +137,9 @@ export class CanvasChartComponent implements OnInit {
       },
       axisY: {
         title: "Value",
-        valueFormatString: "#0,,.",
         suffix: this.dynamicLogLines[0].unit
       },
+
       data: [{
         type: "splineArea",
         color: "rgba(54,158,173,.7)",

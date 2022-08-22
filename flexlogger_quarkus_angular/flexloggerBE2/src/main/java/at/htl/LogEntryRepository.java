@@ -1,8 +1,5 @@
 package at.htl;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.sql.*;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -14,9 +11,11 @@ public class LogEntryRepository {
     private final String user = "postgres";
     private final String password = "NasAmuX73";
     Statement stmt = null;
-    private Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));;
+    private Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+    ;
 
     String dpName;
+
     /**
      * Connect to the PostgreSQL database
      *
@@ -26,21 +25,34 @@ public class LogEntryRepository {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public Set<LogEntry> getAll() {
-        String sql = "SELECT * FROM flexlogger";
+    public Set<LogEntry> getAll(int timeLine) {
+        long timestamp = System.currentTimeMillis() -timeLine;
+        System.out.println(timestamp);
+        String sql = "SELECT * FROM flexlogger where timestamp > ?";
+
 
         try (Connection conn = connect()) {
-            stmt = conn.createStatement();
 
-            ResultSet rs = stmt.executeQuery(sql);
+            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setLong(1, timestamp);
+                //ps.executeUpdate();
+                ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+                while (rs.next()) {
+                    System.out.println(rs.getString("dp_name"));
+                    logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+                }
+
             }
 
-            rs.close();
-            stmt.close();
-            conn.close();
+            //stmt = conn.createStatement();
+
+            //ResultSet rs = stmt.executeQuery(sql);
+
+
+            //rs.close();
+            //stmt.close();
+            //conn.close();
 
         } catch (Exception e) {
 
@@ -48,8 +60,6 @@ public class LogEntryRepository {
             System.exit(0);
 
         }
-
-
         System.out.println(" Data Retrieved Successfully ..");
         return logEntries;
     }
@@ -95,7 +105,6 @@ public class LogEntryRepository {
             pstmt.setLong(4, logEntry.timeStamp);
 
             pstmt.executeUpdate();
-            // check the affected rows
 
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -103,4 +112,30 @@ public class LogEntryRepository {
         return id;
     }
 
+    public Set<LogEntry> getByName(String dpName) {
+        /*String sql = "SELECT * FROM flexlogger WHERE dm_name = :dpName";
+
+        try (Connection conn = connect()) {
+            stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (Exception e) {
+
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+
+        }
+        System.out.println(" Data Retrieved Successfully ..");
+        return logEntries;*/
+        return null;
+    }
 }

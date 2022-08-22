@@ -1,5 +1,7 @@
 package at.htl;
 
+import io.quarkus.logging.Log;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,7 +19,14 @@ public class LogEntryResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Set<LogEntry> getAll() {
-        return elr.getAll();
+        return elr.getAll(3600000);
+    }
+
+    @GET
+    @Path("/name")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<LogEntry> getByName(String name){
+        return elr.getByName(name);
     }
 
     @GET

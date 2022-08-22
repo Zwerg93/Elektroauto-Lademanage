@@ -7,7 +7,6 @@ import {HighchartsChartModule} from "highcharts-angular";
 import { CanvasChartComponent } from './canvas-chart/canvas-chart.component';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import {HttpClientModule} from "@angular/common/http";
-import { DynamicChartComponent } from './dynamic-chart/dynamic-chart.component';
 import {CommonModule} from "@angular/common";
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
@@ -15,8 +14,7 @@ var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
   declarations: [
     AppComponent,
     CanvasChartComponent,
-    CanvasJSChart,
-    DynamicChartComponent
+    CanvasJSChart
   ],
   imports: [
     BrowserModule,
