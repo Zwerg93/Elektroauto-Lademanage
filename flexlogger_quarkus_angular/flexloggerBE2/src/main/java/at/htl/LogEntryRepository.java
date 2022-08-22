@@ -1,5 +1,7 @@
 package at.htl;
 
+import io.quarkus.logging.Log;
+
 import java.sql.*;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -62,6 +64,43 @@ public class LogEntryRepository {
         }
         System.out.println(" Data Retrieved Successfully ..");
         return logEntries;
+    }
+
+    public LogEntry getCurrentByName(String dpName) {
+        String sql = "SELECT * FROM flexlogger where dp_name = ? limit 1";
+        LogEntry logEntry = null;
+
+        try (Connection conn = connect()) {
+
+            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, dpName);
+                //ps.executeUpdate();
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    System.out.println(rs.getString("dp_name"));
+                    logEntry = new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp"));
+                }
+
+            }
+
+            //stmt = conn.createStatement();
+
+            //ResultSet rs = stmt.executeQuery(sql);
+
+
+            //rs.close();
+            //stmt.close();
+            //conn.close();
+
+        } catch (Exception e) {
+
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+
+        }
+        System.out.println(" Data Retrieved Successfully ..");
+        return logEntry;
     }
 
     public Set<LogEntry> getCSV() {

@@ -30,6 +30,13 @@ public class LogEntryResource {
     }
 
     @GET
+    @Path("/currentName")
+    @Produces(MediaType.APPLICATION_JSON)
+    public LogEntry getCurrentName(String name){
+        return elr.getCurrentByName(name);
+    }
+
+    @GET
     @Path("/csv")
     public void getCSV() {
         elr.getCSV();
