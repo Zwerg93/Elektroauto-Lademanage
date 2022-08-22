@@ -31,7 +31,6 @@ export class CanvasChartComponent implements OnInit {
         this.setChartOptions();
         //this.getData();
         this.loadDynamicData();
-
       })
     })
   }
@@ -60,28 +59,6 @@ export class CanvasChartComponent implements OnInit {
     }
   }
 
-  /*getData() {
-    this.dataList = [
-      {x: new Date(this.logLines[0].timeStamp), y: parseInt(this.logLines[0].value)},
-      {x: new Date(this.logLines[1].timeStamp), y: parseInt(this.logLines[1].value)},
-      {x: new Date(this.logLines[2].timeStamp), y: parseInt(this.logLines[2].value)},
-      {x: new Date(this.logLines[3].timeStamp), y: parseInt(this.logLines[3].value)},
-      {x: new Date(this.logLines[4].timeStamp), y: parseInt(this.logLines[4].value)},
-      {x: new Date(this.logLines[5].timeStamp), y: parseInt(this.logLines[5].value)},
-      {x: new Date(this.logLines[6].timeStamp), y: parseInt(this.logLines[6].value)},
-      {x: new Date(this.logLines[7].timeStamp), y: parseInt(this.logLines[7].value)},
-      {x: new Date(this.logLines[8].timeStamp), y: parseInt(this.logLines[8].value)},
-      {x: new Date(this.logLines[9].timeStamp), y: parseInt(this.logLines[9].value)},
-      {x: new Date(this.logLines[10].timeStamp), y: parseInt(this.logLines[10].value)},
-      {x: new Date(this.logLines[11].timeStamp), y: parseInt(this.logLines[11].value)},
-      {x: new Date  (this.logLines[12].timeStamp), y: parseInt(this.logLines[12].value)},
-      {x: new Date(this.logLines[13].timeStamp), y: parseInt(this.logLines[13].value)},
-      {x: new Date(this.logLines[14].timeStamp), y: parseInt(this.logLines[14].value)},
-      {x: new Date(this.logLines[15].timeStamp), y: parseInt(this.logLines[15].value)},
-      {x: new Date(this.logLines[16].timeStamp), y: parseInt(this.logLines[16].value)}
-    ]
-  }*/
-
 
   getFiles() {
     return of(this.logLines);
@@ -93,7 +70,7 @@ export class CanvasChartComponent implements OnInit {
       text: "this.logLines[0].dpId",
     },
     axisY: {
-      title: "Units Sold",
+      title: "Value",
       valueFormatString: "#0,,.",
       suffix: "M"
     },
@@ -110,12 +87,12 @@ export class CanvasChartComponent implements OnInit {
     this.chartOptions = {
       animationEnabled: true,
       title: {
-        text: this.logLines[0].dpId,
+        text: this.dynamicLogLines[0].dpId,
       },
       axisY: {
-        title: "Units Sold",
+        title: "Value",
         valueFormatString: "#0,,.",
-        suffix: "M"
+        suffix: this.dynamicLogLines[0].unit
       },
       data: [{
         type: "splineArea",
