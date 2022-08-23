@@ -58,7 +58,7 @@ export class CanvasChartComponent implements OnInit {
   }
 
   setTimerForNewData() {
-    timer(200, 1000).subscribe(x => {
+    timer(200, 100).subscribe(x => {
       this.dynamicCount += 1;
       this.setChartOptions();
 
