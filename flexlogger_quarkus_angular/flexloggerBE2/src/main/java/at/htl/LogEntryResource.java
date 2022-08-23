@@ -39,9 +39,9 @@ public class LogEntryResource {
     }
 
     @GET
-    @Path("/csv")
-    public void getCSV() throws IOException {
-        elr.getCSVall("2022-08-23", "2022-08-23", "11:34", "11:36", "c:\\angular1\\monitor.csv");
+    @Path("/csv/{startDate}/{endDate}/{startTime}/{endTime}/{filename}")
+    public void getCSV(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate, @PathParam("startTime") String startTime, @PathParam("endTime") String endTime, @PathParam("filename") String filename) throws IOException {
+        elr.getCSVall(startDate, endDate, startTime, endTime, filename);
     }
 
     @GET
@@ -49,7 +49,6 @@ public class LogEntryResource {
     public void getCSVByName() throws IOException {
         elr.getCSVbyName(3600000, "c:\\angular1\\monitorName.csv", "REAL1");
     }
-
 
 
     @GET

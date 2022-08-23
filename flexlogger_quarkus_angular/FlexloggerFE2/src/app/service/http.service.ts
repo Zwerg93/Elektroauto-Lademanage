@@ -17,7 +17,11 @@ export class HttpService {
   }
 
   public getLogEntriesByName(name: string): Observable<LogEntry[]>{
-    return this.http.get<LogEntry[]>("http://localhost:8081/logEntry/name/REAL1");
+    return this.http.get<LogEntry[]>(this.url + "/name/" + name);
+  }
+
+  public createCSV(startDate: string, endDate: string, startTime: string, endTime: string, filename: string){
+    return this.http.get<LogEntry[]>(this.url + "/csv/" + startDate + "/" + endDate + "/" + startTime+ "/" + endTime + "/" + filename);
   }
 
 

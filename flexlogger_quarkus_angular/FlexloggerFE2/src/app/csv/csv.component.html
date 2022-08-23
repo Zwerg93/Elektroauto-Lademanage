@@ -1,0 +1,10 @@
+<label>Anfangs Zeitraum</label>
+<input [(ngModel)]="dateBegin" type="date">
+<input [(ngModel)]="timeBegin" type="time">
+<label>End Zeitraum</label>
+<input [(ngModel)]="dateEnd" type="date">
+<input [(ngModel)]="timeEnd" type="time">
+<label></label>
+<input [(ngModel)]="filename" >
+
+<button (click)="generateCSV()">CSV File generieren</button>

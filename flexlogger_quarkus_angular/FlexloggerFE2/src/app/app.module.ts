@@ -8,20 +8,24 @@ import { CanvasChartComponent } from './canvas-chart/canvas-chart.component';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import {HttpClientModule} from "@angular/common/http";
 import {CommonModule} from "@angular/common";
+import { CsvComponent } from './csv/csv.component';
+import {FormsModule} from "@angular/forms";
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 @NgModule({
   declarations: [
     AppComponent,
     CanvasChartComponent,
-    CanvasJSChart
+    CanvasJSChart,
+    CsvComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HighchartsChartModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
