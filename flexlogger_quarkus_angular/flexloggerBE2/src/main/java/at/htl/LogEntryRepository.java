@@ -1,11 +1,13 @@
 package at.htl;
 
-import io.quarkus.logging.Log;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LogEntryRepository {
 
@@ -14,9 +16,7 @@ public class LogEntryRepository {
     private final String password = "NasAmuX73";
     Statement stmt = null;
     private Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
-    ;
 
-    String dpName;
 
     /**
      * Connect to the PostgreSQL database
@@ -28,14 +28,14 @@ public class LogEntryRepository {
     }
 
     public Set<LogEntry> getAll(int timeLine) {
-        long timestamp = System.currentTimeMillis() -timeLine;
+        long timestamp = System.currentTimeMillis() - timeLine;
         System.out.println(timestamp);
         String sql = "SELECT * FROM flexlogger where timestamp > ?";
 
 
         try (Connection conn = connect()) {
 
-            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setLong(1, timestamp);
                 //ps.executeUpdate();
                 ResultSet rs = ps.executeQuery();
@@ -72,7 +72,7 @@ public class LogEntryRepository {
 
         try (Connection conn = connect()) {
 
-            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, dpName);
                 //ps.executeUpdate();
                 ResultSet rs = ps.executeQuery();
@@ -103,29 +103,55 @@ public class LogEntryRepository {
         return logEntry;
     }
 
-    public Set<LogEntry> getCSV() {
-        String sql = "COPY flexlogger TO '\\C:\\Users\\holzd:logtabledb.csv'  WITH DELIMITER ',' CSV HEADER;";
-
-        try (Connection conn = connect()) {
-            stmt = conn.createStatement();
-
-            ResultSet rs = stmt.executeQuery(sql);
-
-            rs.close();
-            stmt.close();
-            conn.close();
-
-        } catch (Exception e) {
-
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-
-        }
-
-
-        System.out.println(" CSV exported successfully ...");
-        return logEntries;
+    //********* CSV
+    public Set<LogEntry> getCSVall(int timeLine, String filePath) throws IOException {
+        Set<LogEntry> logEntrySet = getAll(timeLine);
+        Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
+        writeToCsvFile(stringSet, new File(filePath));
+        return null;
     }
+
+    public Set<LogEntry> getCSVbyName(int timeLine, String filePath, String name) throws IOException {
+        Set<LogEntry> logEntrySet = getByName(timeLine, name);
+        Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
+        writeToCsvFile(stringSet, new File(filePath));
+        return null;
+    }
+
+
+
+
+
+
+    private void writeToCsvFile(Stream<String> logEntrySet, File file) throws IOException {
+        List<String> collect = logEntrySet
+                .map(this::convertToCsvFormat)
+                .collect(Collectors.toList());
+
+        // CSV is a normal text file, need a writer
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            for (String line : collect) {
+                bw.write(line);
+                bw.newLine();
+            }
+        }
+    }
+
+    public String convertToCsvFormat(final String line) {
+        return Stream.of(line)                              // convert String[] to stream
+                .collect(Collectors.joining(";"));
+    }
+
+
+
+    //********* CSV
+
+    public Set<LogEntry> getCSVbyName(int timeLine) {
+        getAll(timeLine);
+
+        return null;
+    }
+
 
 
     public long insertLogEntry(LogEntry logEntry) {
@@ -151,7 +177,7 @@ public class LogEntryRepository {
         return id;
     }
 
-    public Set<LogEntry> getByName(String dpName) {
+    public Set<LogEntry> getByName(int timeLine, String dpName) {
         /*String sql = "SELECT * FROM flexlogger WHERE dm_name = :dpName";
 
         try (Connection conn = connect()) {

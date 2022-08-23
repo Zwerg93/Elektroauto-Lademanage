@@ -6,6 +6,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -25,27 +26,35 @@ public class LogEntryResource {
     @GET
     @Path("/name")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<LogEntry> getByName(String name){
-        return elr.getByName(name);
+    public Set<LogEntry> getByName(String name) {
+        return elr.getByName(3600000, name);
     }
 
     @GET
     @Path("/currentName")
     @Produces(MediaType.APPLICATION_JSON)
-    public LogEntry getCurrentName(String name){
+    public LogEntry getCurrentName(String name) {
         return elr.getCurrentByName(name);
     }
 
     @GET
     @Path("/csv")
-    public void getCSV() {
-        elr.getCSV();
+    public void getCSV() throws IOException {
+        elr.getCSVall(3600000, "c:\\angular1\\monitor.csv");
     }
+
+    @GET
+    @Path("/csv/name")
+    public void getCSVByName() throws IOException {
+        elr.getCSVall(3600000, "c:\\angular1\\monitor.csv");
+    }
+
+
 
     @GET
     @Path("/insert")
     public void insert() {
-        System.out.println(elr.insertLogEntry(new LogEntry("Kompressor_kk", "454","A", 1660870822)));
+        System.out.println(elr.insertLogEntry(new LogEntry("Kompressor_kk", "454", "A", 1660870822)));
     }
 
 

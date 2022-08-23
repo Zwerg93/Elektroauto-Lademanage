@@ -45,4 +45,9 @@ public class LogEntry {
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
+
+    @Override
+    public String toString() {
+        return dpId + "," + value + "," + unit + "," + timeStamp;
+    }
 }
