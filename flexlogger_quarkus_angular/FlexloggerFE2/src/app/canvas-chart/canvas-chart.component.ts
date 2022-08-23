@@ -88,7 +88,7 @@ export class CanvasChartComponent implements OnInit {
       }
     }
     this.setChartOptions();
-    this.chartOptions.data[0].dataPoints = [ {x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp), y: 0}];
+    this.chartOptions.data[0].dataPoints = [ {x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount].value)}];
 
   }
 
