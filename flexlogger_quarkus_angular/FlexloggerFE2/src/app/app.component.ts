@@ -17,7 +17,7 @@ export class AppComponent {
   }
 
   loadLogEntries(){
-    this.http.getLogEntries().subscribe(value => {
+    this.http.getLogEntriesByName("REAL1").subscribe(value => {
       this.logLines = value;
       console.log(value);
     }, error => console.log(error))

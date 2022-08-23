@@ -8,12 +8,18 @@ import {LogEntry} from "../model/LogEntry";
 })
 export class HttpService {
 
-  url = "http://localhost:8081/";
+  url = "http://localhost:8081/logEntry";
 
   constructor(private http: HttpClient) { }
 
   public getLogEntries(): Observable<LogEntry[]>{
-    return this.http.get<LogEntry[]>(this.url + "/logEntry");
+    return this.http.get<LogEntry[]>(this.url);
   }
+
+  public getLogEntriesByName(name: string): Observable<LogEntry[]>{
+    return this.http.get<LogEntry[]>("http://localhost:8081/logEntry/name/REAL1");
+  }
+
+
 
 }

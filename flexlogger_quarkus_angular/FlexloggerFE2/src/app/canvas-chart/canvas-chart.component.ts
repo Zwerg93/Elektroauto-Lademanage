@@ -63,7 +63,7 @@ export class CanvasChartComponent implements OnInit {
   }
 
   setTimerForNewData() {
-    timer(1000, 1000).subscribe(x => {
+    timer(200, 200).subscribe(x => {
       this.dynamicCount += 1;
       this.setChartOptions();
     })
@@ -103,7 +103,6 @@ export class CanvasChartComponent implements OnInit {
       }
       nameInList = false;
     }
-    console.log(this.listOfDatapointNames);
   }
 
 
