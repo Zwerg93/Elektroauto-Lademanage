@@ -4,6 +4,7 @@ import io.quarkus.logging.Log;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -24,9 +25,9 @@ public class LogEntryResource {
     }
 
     @GET
-    @Path("/name")
+    @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<LogEntry> getByName(String name) {
+    public Set<LogEntry> getByName(@PathParam("name") String name) {
         return elr.getByName(3600000, name);
     }
 
@@ -46,7 +47,7 @@ public class LogEntryResource {
     @GET
     @Path("/csv/name")
     public void getCSVByName() throws IOException {
-        elr.getCSVall(3600000, "c:\\angular1\\monitor.csv");
+        elr.getCSVbyName(3600000, "c:\\angular1\\monitorName.csv", "REAL1");
     }
 
 

@@ -15,7 +15,6 @@ public class LogEntryRepository {
     private final String user = "postgres";
     private final String password = "NasAmuX73";
     Statement stmt = null;
-    private Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
 
 
     /**
@@ -28,6 +27,7 @@ public class LogEntryRepository {
     }
 
     public Set<LogEntry> getAll(int timeLine) {
+        Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
         long timestamp = System.currentTimeMillis() - timeLine;
         System.out.println(timestamp);
         String sql = "SELECT * FROM flexlogger where timestamp > ?";
@@ -104,23 +104,17 @@ public class LogEntryRepository {
     }
 
     //********* CSV
-    public Set<LogEntry> getCSVall(int timeLine, String filePath) throws IOException {
+    public void getCSVall(int timeLine, String filePath) throws IOException {
         Set<LogEntry> logEntrySet = getAll(timeLine);
         Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
         writeToCsvFile(stringSet, new File(filePath));
-        return null;
     }
 
-    public Set<LogEntry> getCSVbyName(int timeLine, String filePath, String name) throws IOException {
+    public void getCSVbyName(int timeLine, String filePath, String name) throws IOException {
         Set<LogEntry> logEntrySet = getByName(timeLine, name);
         Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
         writeToCsvFile(stringSet, new File(filePath));
-        return null;
     }
-
-
-
-
 
 
     private void writeToCsvFile(Stream<String> logEntrySet, File file) throws IOException {
@@ -178,20 +172,32 @@ public class LogEntryRepository {
     }
 
     public Set<LogEntry> getByName(int timeLine, String dpName) {
-        /*String sql = "SELECT * FROM flexlogger WHERE dm_name = :dpName";
+        Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+        String sql = "SELECT * FROM flexlogger WHERE dp_name = ? AND timestamp > ?";
+        long timestamp = System.currentTimeMillis() - timeLine;
 
         try (Connection conn = connect()) {
-            stmt = conn.createStatement();
 
-            ResultSet rs = stmt.executeQuery(sql);
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, dpName);
+                ps.setLong(2, timestamp);
+                //ps.executeUpdate();
+                ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+                while (rs.next()) {
+                    logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+                }
+
             }
 
-            rs.close();
-            stmt.close();
-            conn.close();
+            //stmt = conn.createStatement();
+
+            //ResultSet rs = stmt.executeQuery(sql);
+
+
+            //rs.close();
+            //stmt.close();
+            //conn.close();
 
         } catch (Exception e) {
 
@@ -200,7 +206,6 @@ public class LogEntryRepository {
 
         }
         System.out.println(" Data Retrieved Successfully ..");
-        return logEntries;*/
-        return null;
+        return logEntries;
     }
 }
