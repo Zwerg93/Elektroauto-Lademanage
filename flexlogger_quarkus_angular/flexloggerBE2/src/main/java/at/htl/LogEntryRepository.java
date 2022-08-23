@@ -1,16 +1,21 @@
 package at.htl;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LogEntryRepository {
 
     private final String url = "jdbc:postgresql://developer.pi-tec.at:5432/Datamanager_SMA";
-    private final String user = "flex";
+    private final String user = "postgres";
     private final String password = "NasAmuX73";
     Statement stmt = null;
+
 
     /**
      * Connect to the PostgreSQL database
@@ -21,43 +26,129 @@ public class LogEntryRepository {
         return DriverManager.getConnection(url, user, password);
     }
 
-    public String getAll() {
-        String sql = "SELECT * FROM flexlogger";
+    public Set<LogEntry> getAll(int timeLine) {
+        Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+        long timestamp = System.currentTimeMillis() - timeLine;
+        System.out.println(timestamp);
+        String sql = "SELECT * FROM flexlogger where timestamp > ?";
+
 
         try (Connection conn = connect()) {
-            stmt = conn.createStatement();
 
-            ResultSet rs = stmt.executeQuery(sql);
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setLong(1, timestamp);
+                //ps.executeUpdate();
+                ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-
-                String dpName = rs.getString("dp_name");
-
-                System.out.println("dp Name: " + dpName);
-
-                System.out.println();
+                while (rs.next()) {
+                    System.out.println(rs.getString("dp_name"));
+                    logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+                }
 
             }
 
-            rs.close();
-            stmt.close();
-            conn.close();
+            //stmt = conn.createStatement();
+
+            //ResultSet rs = stmt.executeQuery(sql);
+
+
+            //rs.close();
+            //stmt.close();
+            //conn.close();
 
         } catch (Exception e) {
 
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
-
             System.exit(0);
 
         }
-
-
         System.out.println(" Data Retrieved Successfully ..");
-        return "";
+        return logEntries;
+    }
+
+    public LogEntry getCurrentByName(String dpName) {
+        String sql = "SELECT * FROM flexlogger where dp_name = ? limit 1";
+        LogEntry logEntry = null;
+
+        try (Connection conn = connect()) {
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, dpName);
+                //ps.executeUpdate();
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    System.out.println(rs.getString("dp_name"));
+                    logEntry = new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp"));
+                }
+
+            }
+
+            //stmt = conn.createStatement();
+
+            //ResultSet rs = stmt.executeQuery(sql);
+
+
+            //rs.close();
+            //stmt.close();
+            //conn.close();
+
+        } catch (Exception e) {
+
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+
+        }
+        System.out.println(" Data Retrieved Successfully ..");
+        return logEntry;
+    }
+
+    //********* CSV
+    public void getCSVall(int timeLine, String filePath) throws IOException {
+        Set<LogEntry> logEntrySet = getAll(timeLine);
+        Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
+        writeToCsvFile(stringSet, new File(filePath));
+    }
+
+    public void getCSVbyName(int timeLine, String filePath, String name) throws IOException {
+        Set<LogEntry> logEntrySet = getByName(timeLine, name);
+        Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
+        writeToCsvFile(stringSet, new File(filePath));
     }
 
 
-    public long insertActor(LogEntry logEntry) {
+    private void writeToCsvFile(Stream<String> logEntrySet, File file) throws IOException {
+        List<String> collect = logEntrySet
+                .map(this::convertToCsvFormat)
+                .collect(Collectors.toList());
+
+        // CSV is a normal text file, need a writer
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+            for (String line : collect) {
+                bw.write(line);
+                bw.newLine();
+            }
+        }
+    }
+
+    public String convertToCsvFormat(final String line) {
+        return Stream.of(line)                              // convert String[] to stream
+                .collect(Collectors.joining(";"));
+    }
+
+
+
+    //********* CSV
+
+    public Set<LogEntry> getCSVbyName(int timeLine) {
+        getAll(timeLine);
+
+        return null;
+    }
+
+
+
+    public long insertLogEntry(LogEntry logEntry) {
         String SQL = "INSERT INTO flexlogger(dp_name, value, unit, timestamp) "
                 + "VALUES(?,?,?,?)";
 
@@ -69,25 +160,52 @@ public class LogEntryRepository {
 
             pstmt.setString(1, logEntry.dpId);
             pstmt.setString(2, logEntry.value);
-            pstmt.setString(1, logEntry.dpId);
-            pstmt.setString(2, logEntry.value);
+            pstmt.setString(3, logEntry.unit);
+            pstmt.setLong(4, logEntry.timeStamp);
 
-            int affectedRows = pstmt.executeUpdate();
-            // check the affected rows
-            if (affectedRows > 0) {
-                // get the ID back
-                try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        id = rs.getLong(1);
-                    }
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-                }
-            }
+            pstmt.executeUpdate();
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
         return id;
     }
 
+    public Set<LogEntry> getByName(int timeLine, String dpName) {
+        Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
+        String sql = "SELECT * FROM flexlogger WHERE dp_name = ? AND timestamp > ?";
+        long timestamp = System.currentTimeMillis() - timeLine;
+
+        try (Connection conn = connect()) {
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, dpName);
+                ps.setLong(2, timestamp);
+                //ps.executeUpdate();
+                ResultSet rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
+                }
+
+            }
+
+            //stmt = conn.createStatement();
+
+            //ResultSet rs = stmt.executeQuery(sql);
+
+
+            //rs.close();
+            //stmt.close();
+            //conn.close();
+
+        } catch (Exception e) {
+
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+
+        }
+        System.out.println(" Data Retrieved Successfully ..");
+        return logEntries;
+    }
 }
