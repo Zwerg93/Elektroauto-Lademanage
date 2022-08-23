@@ -65,14 +65,15 @@ export class CanvasChartComponent implements OnInit {
       // var length = chart.options.data[0].dataPoints.length;
 
 
-      this.chartOptions.title.text = "New DataPoint Added at the end";
+      this.chartOptions.title.text = this.dynamicLogLines[this.dynamicCount].dpId;
       console.log("test add new DP")
       console.log(this.dynamicLogLines[this.dynamicCount].timeStamp)
+
       this.chartOptions.data[0].dataPoints.push({
         x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp),
-        y: parseInt(this.dynamicLogLines[this.dynamicCount].value)
+        y: parseFloat(this.dynamicLogLines[this.dynamicCount].value)
       });
-      console.log( this.chartOptions.data[0].dataPoints);
+      //console.log( this.chartOptions.data[0].dataPoints);
 
     })
 
