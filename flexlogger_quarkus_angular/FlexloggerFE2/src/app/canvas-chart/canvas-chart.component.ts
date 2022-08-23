@@ -30,7 +30,7 @@ export class CanvasChartComponent implements OnInit {
       this.getFiles().subscribe(file => {
         this.logLines = file;
         this.getListOfDatapointNames();
-        this.filterLogLines("REAL173");
+        this.filterLogLines("REAL1");
         this.setChartOptions();
         this.showChart = true;
         //this.getData();
@@ -63,7 +63,7 @@ export class CanvasChartComponent implements OnInit {
   }
 
   setTimerForNewData() {
-    timer(200, 200).subscribe(x => {
+    timer(500, 500).subscribe(x => {
       this.dynamicCount += 1;
       this.setChartOptions();
     })
