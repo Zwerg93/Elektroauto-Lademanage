@@ -21,7 +21,7 @@ public class LogEntryResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Set<LogEntry> getAll2() {
-        return elr.getAll("2022-08-23", "2022-08-23", "13:41", "13:43");
+        return elr.getAll("2022-08-23", "2022-08-23", "13:41", "13:56");
     }
 
     @GET
