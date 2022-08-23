@@ -28,7 +28,7 @@ public class LogEntryResource {
     @Path("/name/{name}")
     @Produces(MediaType.APPLICATION_JSON)
     public Set<LogEntry> getByName(@PathParam("name") String name) {
-        return elr.getByName(3600000, name);
+        return elr.getByName("2022-08-23", "2022-08-23", "13:41", "13:43", "REAL173");
     }
 
     @GET
@@ -45,9 +45,9 @@ public class LogEntryResource {
     }
 
     @GET
-    @Path("/csv/name")
-    public void getCSVByName() throws IOException {
-        elr.getCSVbyName(3600000, "c:\\angular1\\monitorName.csv", "REAL1");
+    @Path("/csv/{startDate}/{endDate}/{startTime}/{endTime}/{filepath : .*}/{name}")
+    public void getCSVByName(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate, @PathParam("startTime") String startTime, @PathParam("endTime") String endTime, @PathParam("filepath") String filepath, @PathParam("name") String name) throws IOException {
+        elr.getCSVbyName(startDate, endDate, startTime, endTime, filepath, name);
     }
 
 

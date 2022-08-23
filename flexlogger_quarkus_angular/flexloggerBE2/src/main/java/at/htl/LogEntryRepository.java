@@ -141,8 +141,8 @@ public class LogEntryRepository {
         writeToCsvFile(stringSet, new File(filePath));
     }
 
-    public void getCSVbyName(int timeLine, String filePath, String name) throws IOException {
-        Set<LogEntry> logEntrySet = getByName(timeLine, name);
+    public void getCSVbyName(String startDate, String endDate, String startTime, String endTime, String filePath, String name) throws IOException {
+        Set<LogEntry> logEntrySet = getByName(startDate, endDate, startTime, endTime, name);
         Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
         writeToCsvFile(stringSet, new File(filePath));
     }
@@ -194,34 +194,31 @@ public class LogEntryRepository {
         return id;
     }
 
-    public Set<LogEntry> getByName(int timeLine, String dpName) {
+    public Set<LogEntry> getByName(String dateStart, String dateEnd, String timeStart, String timeEnd, String dpName) {
         Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
-        String sql = "SELECT * FROM flexlogger WHERE dp_name = ? AND timestamp > ?";
-        long timestamp = System.currentTimeMillis() - timeLine;
+
+        long startMillis = convertToMillis(dateStart, timeStart);
+        long endMillis = convertToMillis(dateEnd, timeEnd);
+
+        String sql = "SELECT * FROM flexlogger WHERE dp_name = ? AND timestamp > ? AND timestamp < ? order by timestamp";
+
 
         try (Connection conn = connect()) {
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, dpName);
-                ps.setLong(2, timestamp);
+                ps.setLong(2, startMillis);
+                ps.setLong(3, endMillis);
                 //ps.executeUpdate();
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
+                    System.out.println(rs.getString("dp_name"));
                     logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
                 }
-
+                //rs.close();
             }
-
-            //stmt = conn.createStatement();
-
-            //ResultSet rs = stmt.executeQuery(sql);
-
-
-            //rs.close();
             //stmt.close();
-            //conn.close();
-
         } catch (Exception e) {
 
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
