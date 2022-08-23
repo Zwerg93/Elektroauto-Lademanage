@@ -70,7 +70,7 @@ public class LogEntryRepository {
         long startMillis = convertToMillis(dateStart, timeStart);
         long endMillis = convertToMillis(dateEnd, timeEnd);
 
-        String sql = "SELECT * FROM flexlogger where timestamp > ? AND timestamp < ?";
+        String sql = "SELECT * FROM flexlogger where timestamp > ? AND timestamp < ? order by timestamp";
 
         try (Connection conn = connect()) {
             try (PreparedStatement ps = conn.prepareStatement(sql)) {

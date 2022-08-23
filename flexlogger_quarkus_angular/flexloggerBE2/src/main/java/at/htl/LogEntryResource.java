@@ -21,7 +21,7 @@ public class LogEntryResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Set<LogEntry> getAll2() {
-        return elr.getAll("2022-08-23", "2022-08-23", "11:34", "11:36");
+        return elr.getAll("2022-08-23", "2022-08-23", "13:41", "13:43");
     }
 
     @GET
@@ -39,9 +39,9 @@ public class LogEntryResource {
     }
 
     @GET
-    @Path("/csv/{startDate}/{endDate}/{startTime}/{endTime}/{filename}")
-    public void getCSV(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate, @PathParam("startTime") String startTime, @PathParam("endTime") String endTime, @PathParam("filename") String filename) throws IOException {
-        elr.getCSVall(startDate, endDate, startTime, endTime, filename);
+    @Path("/csv/{startDate}/{endDate}/{startTime}/{endTime}/{filepath : .*}")
+    public void getCSV(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate, @PathParam("startTime") String startTime, @PathParam("endTime") String endTime, @PathParam("filepath") String filepath) throws IOException {
+        elr.getCSVall(startDate, endDate, startTime, endTime, filepath);
     }
 
     @GET
