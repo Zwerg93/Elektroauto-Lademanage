@@ -20,8 +20,8 @@ public class LogEntryResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<LogEntry> getAll() {
-        return elr.getAll(3600000);
+    public Set<LogEntry> getAll2() {
+        return elr.getAll("2022-08-23", "2022-08-23", "11:34", "11:36");
     }
 
     @GET
@@ -41,7 +41,7 @@ public class LogEntryResource {
     @GET
     @Path("/csv")
     public void getCSV() throws IOException {
-        elr.getCSVall(3600000, "c:\\angular1\\monitor.csv");
+        elr.getCSVall("2022-08-23", "2022-08-23", "11:34", "11:36", "c:\\angular1\\monitor.csv");
     }
 
     @GET
