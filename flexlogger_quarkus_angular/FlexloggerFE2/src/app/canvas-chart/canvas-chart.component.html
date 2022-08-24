@@ -11,9 +11,17 @@
   <div *ngIf="this.showChart">
     <canvasjs-chart [options]="chartOptions" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
   </div>
+  <label>Anfangs Zeitraum</label>
+  <input [(ngModel)]="dateBegin" type="date">
+  <input [(ngModel)]="timeBegin" type="time">
+  <label>End Zeitraum</label>
+  <input [(ngModel)]="dateEnd" type="date">
+  <input [(ngModel)]="timeEnd" type="time">
+  <label>filepath</label>
   <div *ngFor="let name of listOfDatapointNames">
     <button (click)="filterLogLines(name)">{{name}}</button>
   </div>
+
 
 </body>
 </html>

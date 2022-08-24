@@ -24,6 +24,11 @@ export class HttpService {
     return this.http.get<LogEntry[]>(this.url + "/csv/" + startDate + "/" + endDate + "/" + startTime+ "/" + endTime + "/" + filename);
   }
 
+  public createCSVByName(startDate: string, endDate: string, startTime: string, endTime: string, filename: string, name: string){
+    return this.http.get<LogEntry[]>(this.url + "/csv/" + startDate + "/" + endDate + "/" + startTime+ "/" + endTime + "/" + filename + "/" + name);
+  }
+
+
 
 
 }

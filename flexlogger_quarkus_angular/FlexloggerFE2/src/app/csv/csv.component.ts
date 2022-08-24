@@ -11,7 +11,10 @@ export class CsvComponent implements OnInit {
   timeBegin: any;
   dateEnd: any;
   timeEnd: any;
-  filename: any;
+  filepath: any;
+  showField: Boolean = false;
+  dataName: any|undefined;
+
   constructor(private http: HttpService) { }
 
   ngOnInit(): void {
@@ -20,6 +23,15 @@ export class CsvComponent implements OnInit {
 
   generateCSV() {
     console.log("clicked")
-    this.http.createCSV(this.dateBegin, this.dateEnd, this.timeBegin, this.timeEnd, this.filename).subscribe(value => {}, error => console.log(error))
+    if(this.dataName == undefined){
+      this.http.createCSV(this.dateBegin, this.dateEnd, this.timeBegin, this.timeEnd, this.filepath).subscribe(value => {}, error => console.log(error))
+    } else {
+      this.http.createCSVByName(this.dateBegin, this.dateEnd, this.timeBegin, this.timeEnd, this.filepath, this.dataName).subscribe(value => {}, error => console.log(error))
+    }
+
+  }
+
+  showNameField() {
+    this.showField = true;
   }
 }

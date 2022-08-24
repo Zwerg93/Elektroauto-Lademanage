@@ -17,6 +17,10 @@ export class CanvasChartComponent implements OnInit {
   listOfDatapointNames: string[] = [];
   showChart: Boolean = false;
   chart: any;
+  dateBegin: any;
+  timeBegin: any;
+  dateEnd: any;
+  timeEnd: any;
   //files: { data: { color: string; dataPoints: { x: Date; y: number }[]; type: string }[]; axisY: { title: string; suffix: string; valueFormatString: string }; title: { text: string }; animationEnabled: boolean } = [];
 
   constructor(private http: HttpService) {
@@ -58,7 +62,7 @@ export class CanvasChartComponent implements OnInit {
   }
 
   setTimerForNewData() {
-    timer(200, 100).subscribe(x => {
+    timer(50, 50).subscribe(x => {
       this.dynamicCount += 1;
       this.setChartOptions();
 
@@ -90,7 +94,6 @@ export class CanvasChartComponent implements OnInit {
     }
     this.setChartOptions();
     this.chartOptions.data[0].dataPoints = [ {x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount].value)}];
-
   }
 
   getListOfDatapointNames() {
@@ -136,6 +139,7 @@ export class CanvasChartComponent implements OnInit {
       ]
     }]
   }
+
 
 
   setChartOptions() {

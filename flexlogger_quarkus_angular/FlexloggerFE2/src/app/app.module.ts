@@ -9,6 +9,8 @@ import {HttpClientModule} from "@angular/common/http";
 import {CommonModule} from "@angular/common";
 import { CsvComponent } from './csv/csv.component';
 import {FormsModule} from "@angular/forms";
+import { CanvasChartLiveComponent } from './canvas-chart-live/canvas-chart-live.component';
+import { CanvasChartSingleComponent } from './canvas-chart-single/canvas-chart-single.component';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 @NgModule({
@@ -16,7 +18,9 @@ var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
     AppComponent,
     CanvasChartComponent,
     CanvasJSChart,
-    CsvComponent
+    CsvComponent,
+    CanvasChartLiveComponent,
+    CanvasChartSingleComponent
   ],
   imports: [
     BrowserModule,
