@@ -64,7 +64,7 @@ public class LogEntryRepository {
     */
 
 
-    public Set<LogEntry> getAll(String dateStart, String dateEnd, String timeStart, String timeEnd) {
+    public Set<LogEntry> getAll(String dateStart, String timeStart, String dateEnd, String timeEnd) {
         Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
 
         long startMillis = convertToMillis(dateStart, timeStart);
@@ -106,11 +106,10 @@ public class LogEntryRepository {
     }
 
     public LogEntry getCurrentByName(String dpName) {
-        String sql = "SELECT * FROM flexlogger where dp_name = ? limit 1";
+        String sql = "SELECT * FROM flexlogger where dp_name = ? order by timestamp desc limit 1";
         LogEntry logEntry = null;
 
         try (Connection conn = connect()) {
-
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, dpName);
                 //ps.executeUpdate();

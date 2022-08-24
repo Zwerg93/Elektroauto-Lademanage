@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpService} from "../service/http.service";
 import {LogEntry} from "../model/LogEntry";
 import {of, timer} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-canvas-chart',
@@ -10,6 +11,10 @@ import {of, timer} from "rxjs";
 })
 export class CanvasChartComponent implements OnInit {
 
+  dateBegin: any;
+  timeBegin: any;
+  dateEnd: any;
+  timeEnd: any;
   logLines: LogEntry[] = [];
   dataList: any = [];
   dynamicCount: number = 0;
@@ -17,17 +22,14 @@ export class CanvasChartComponent implements OnInit {
   listOfDatapointNames: string[] = [];
   showChart: Boolean = false;
   chart: any;
-  dateBegin: any;
-  timeBegin: any;
-  dateEnd: any;
-  timeEnd: any;
+
+
   //files: { data: { color: string; dataPoints: { x: Date; y: number }[]; type: string }[]; axisY: { title: string; suffix: string; valueFormatString: string }; title: { text: string }; animationEnabled: boolean } = [];
 
-  constructor(private http: HttpService) {
+  constructor(private http: HttpService, private route: ActivatedRoute) {
     this.onload();
 
     timer(1000).subscribe(x => {
-      //this.getPlaylists()
       this.getFiles().subscribe(file => {
         this.logLines = file;
         this.getListOfDatapointNames();
@@ -44,7 +46,11 @@ export class CanvasChartComponent implements OnInit {
   }
 
   onload() {
-    this.http.getLogEntries().subscribe(value => {
+    this.dateBegin = this.route.snapshot.params['dateBegin'];
+    this.timeBegin = this.route.snapshot.params['timeBegin'];
+    this.dateEnd = this.route.snapshot.params['dateEnd'];
+    this.timeEnd = this.route.snapshot.params['timeEnd'];
+    this.http.getLogEntries(this.dateBegin, this.timeBegin, this.dateEnd,this.timeEnd).subscribe(value => {
       this.logLines = value;
     }, error => console.log(error));
   }

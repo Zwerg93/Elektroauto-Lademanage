@@ -1,0 +1,64 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<h1>Flex Logger Diagramme</h1>
+<div class="wrapper">
+  <div class="startOptions">
+    <h2>Alle Diagramme</h2>
+    <p>Zeitraum</p>
+    <label>Anfangs Zeitraum</label>
+    <input [(ngModel)]="dateBegin1" type="date">
+    <input [(ngModel)]="timeBegin1" type="time">
+    <label>End Zeitraum</label>
+    <input [(ngModel)]="dateEnd1" type="date">
+    <input [(ngModel)]="timeEnd1" type="time">
+    <button (click)="routeToAll()">Alle Diagramme</button>
+  </div>
+  <div class="startOptions">
+    <h2>Ein Diagramm</h2>
+    <p>Zeitraum</p>
+    <label>Anfangs Zeitraum</label>
+    <input [(ngModel)]="dateBegin2" type="date">
+    <input [(ngModel)]="timeBegin2" type="time">
+    <label>End Zeitraum</label>
+    <input [(ngModel)]="dateEnd2" type="date">
+    <input [(ngModel)]="timeEnd2" type="time">
+    <button (click)="routeToOne()">Ein Diagramm</button>
+  </div>
+  <div class="startOptions">
+    <h2>Live Diagramm</h2>
+    <input [(ngModel)]="dataName4">
+    <button (click)="routeToLive()">Live Diagramm</button>
+  </div>
+  <div class="startOptions">
+    <h2>CSV File generieren</h2>
+    <p>Zeitraum</p>
+    <label>Anfangs Zeitraum</label>
+    <input [(ngModel)]="dateBegin3" type="date">
+    <input [(ngModel)]="timeBegin3" type="time">
+    <label>End Zeitraum</label>
+    <input [(ngModel)]="dateEnd3" type="date">
+    <input [(ngModel)]="timeEnd3" type="time">
+    <label>filepath</label>
+    <input [(ngModel)]="filepath3" >
+    <label>nur ein Datenpunkt: </label>
+    <input (change)="showNameField(($event))" type="checkbox">
+    <label *ngIf="showField3">Name des Datenpunkts:</label>
+    <input *ngIf="showField3" [(ngModel)]="dataName3">
+    <button (click)="generateCSV()">CSV File generieren</button>
+
+  </div>
+
+</div>
+
+</body>
+</html>
