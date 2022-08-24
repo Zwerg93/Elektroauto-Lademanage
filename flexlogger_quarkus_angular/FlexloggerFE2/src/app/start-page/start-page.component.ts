@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpService} from "../service/http.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Observable, timer} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-start-page',
@@ -21,18 +23,19 @@ export class StartPageComponent implements OnInit {
   dateEnd3: any;
   timeEnd3: any;
   filepath3: any;
-  dataName3: any|undefined;
+  dataName3: any | undefined;
   showField3: Boolean = false;
-  dataName4: any|undefined;
+  dataName4: any | undefined;
 
 
-  constructor(private http: HttpService, private router : Router, private route: ActivatedRoute) { }
+  constructor(private http: HttpService, private router: Router, private route: ActivatedRoute, private httpsiscooler: HttpClient) {
+  }
 
   ngOnInit(): void {
   }
 
   routeToAll() {
-    this.router.navigate(['all/' + this.dateBegin1 + '/' + this.timeBegin1 + '/' +this.dateEnd1 + '/' + this.timeEnd1], {relativeTo: this.route});
+    this.router.navigate(['all/' + this.dateBegin1 + '/' + this.timeBegin1 + '/' + this.dateEnd1 + '/' + this.timeEnd1], {relativeTo: this.route});
   }
 
   routeToOne() {
@@ -44,21 +47,32 @@ export class StartPageComponent implements OnInit {
   }
 
   generateCSV() {
-    if(this.dataName3 == undefined){
-      this.http.createCSV(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv").subscribe(value => {}, error => console.log(error))
+    if (this.dataName3 == undefined) {
+      //this.http.createCSV(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv").subscribe(value => {}, error => console.log(error));
+      this.http.downloadCSV().subscribe(value => {}, error => console.log(error));
     } else {
-      this.http.createCSVByName(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv", this.dataName3).subscribe(value => {}, error => console.log(error))
+      //this.http.createCSVByName(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv", this.dataName3).subscribe(value => {}, error => console.log(error));
+      console.log("oki");
+      this.http.downloadCSV().subscribe(value => {}, error => console.log(error));
     }
+
+
+  }
+
+  public getPDF(): Observable<Blob> {
+//const options = { responseType: 'blob' }; there is no use of this
+    let uri = 'localhost:8081/logEntry/download/';
+    // this.http refers to HttpClient. Note here that you cannot use the generic get<Blob> as it does not compile: instead you "choose" the appropriate API in this way.
+    return this.httpsiscooler.get(uri, {responseType: 'blob'});
   }
 
   showNameField(event: any) {
-    if ( event.target.checked ) {
+    if (event.target.checked) {
       this.showField3 = true;
     } else {
       this.showField3 = false;
     }
   }
-
 
 
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpService} from "../service/http.service";
+import {Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-csv',
@@ -27,9 +29,13 @@ export class CsvComponent implements OnInit {
       this.http.createCSV(this.dateBegin, this.dateEnd, this.timeBegin, this.timeEnd, this.filepath).subscribe(value => {}, error => console.log(error))
     } else {
       this.http.createCSVByName(this.dateBegin, this.dateEnd, this.timeBegin, this.timeEnd, this.filepath, this.dataName).subscribe(value => {}, error => console.log(error))
+     // this.getPDF();
     }
 
+
+
   }
+
 
   showNameField() {
     this.showField = true;

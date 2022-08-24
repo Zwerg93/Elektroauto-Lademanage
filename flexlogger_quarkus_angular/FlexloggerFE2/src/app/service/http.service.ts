@@ -32,6 +32,10 @@ export class HttpService {
     return this.http.get<LogEntry[]>(this.url + "/csv/" + startDate + "/" + endDate + "/" + startTime+ "/" + endTime + "/" + filename + "/" + name);
   }
 
+  public downloadCSV(){
+    return this.http.get(this.url + "/download/");
+  }
+
 
 
 
