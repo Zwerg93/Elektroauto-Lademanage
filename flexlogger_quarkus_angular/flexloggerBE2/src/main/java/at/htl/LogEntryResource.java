@@ -1,16 +1,21 @@
 package at.htl;
 
 import io.quarkus.logging.Log;
+import io.smallrye.mutiny.Uni;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static io.vertx.core.http.impl.HttpClientConnection.log;
 
 @Path("/logEntry")
 public class LogEntryResource {
@@ -56,6 +61,21 @@ public class LogEntryResource {
     @Path("/insert")
     public void insert() {
         System.out.println(elr.insertLogEntry(new LogEntry("Kompressor_kk", "454", "A", 1660870822)));
+    }
+
+    @GET
+    @Path("/download")
+    @Produces({"text/csv"})
+    public Response downloadFile() {
+        String fileName = "monitor.csv";
+        String path = "C:\\angular1\\" + fileName;
+        File audioFile = new File(path);
+        if (!audioFile.exists()) {
+            throw new RuntimeException("File not found: " +  fileName);
+        }
+        Response.ResponseBuilder res = Response.ok((Object) audioFile);
+        res.header("Content-Disposition", "inline;filename=" + fileName);
+        return res.build();
     }
 
 

@@ -1,9 +1,7 @@
 package at.htl;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.ws.rs.core.StreamingOutput;
+import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -106,7 +104,7 @@ public class LogEntryRepository {
     }
 
     public LogEntry getCurrentByName(String dpName) {
-        String sql = "SELECT * FROM flexlogger where dp_name = ? order by timestamp desc limit 1";
+        String sql = "SELECT * FROM flexlogger where dp_name = ? order by timestamp desc limit 10";
         LogEntry logEntry = null;
 
         try (Connection conn = connect()) {
@@ -147,6 +145,7 @@ public class LogEntryRepository {
     }
 
 
+
     private void writeToCsvFile(Stream<String> logEntrySet, File file) throws IOException {
         List<String> collect = logEntrySet
                 .map(this::convertToCsvFormat)
@@ -159,6 +158,8 @@ public class LogEntryRepository {
                 bw.newLine();
             }
         }
+
+
     }
 
     public String convertToCsvFormat(final String line) {
