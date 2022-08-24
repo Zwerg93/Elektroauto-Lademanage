@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {HttpService} from "./service/http.service";
 import {LogEntry} from "./model/LogEntry";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -9,17 +10,13 @@ import {LogEntry} from "./model/LogEntry";
 })
 export class AppComponent {
   title = 'flexloggerFE2';
-  logLines: LogEntry[] = [];
 
 
-  constructor(private http: HttpService){
+
+  constructor(){
 
   }
 
-  loadLogEntries(){
-    this.http.getLogEntriesByName("REAL1").subscribe(value => {
-      this.logLines = value;
-      console.log(value);
-    }, error => console.log(error))
-  }
+
+
 }

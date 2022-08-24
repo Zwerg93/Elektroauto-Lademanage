@@ -20,8 +20,9 @@ public class LogEntryResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<LogEntry> getAll2() {
-        return elr.getAll("2022-08-23", "2022-08-23", "13:41", "14:20");
+    @Path("/all/{startDate}/{endDate}/{startTime}/{endTime}")
+    public Set<LogEntry> getAll2(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate, @PathParam("startTime") String startTime, @PathParam("endTime") String endTime) {
+        return elr.getAll(startDate, endDate, startTime, endTime);
     }
 
     @GET
