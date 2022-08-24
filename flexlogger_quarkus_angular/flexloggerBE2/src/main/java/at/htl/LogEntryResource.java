@@ -68,7 +68,7 @@ public class LogEntryResource {
     @Produces({"text/csv"})
     public Response downloadFile() {
         String fileName = "monitor.csv";
-        String path = "C:\\angular1\\" + fileName;
+        String path = "/home/marcel/Desktop" + fileName;
         File audioFile = new File(path);
         if (!audioFile.exists()) {
             throw new RuntimeException("File not found: " +  fileName);

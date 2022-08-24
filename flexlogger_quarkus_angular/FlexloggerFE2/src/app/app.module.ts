@@ -10,7 +10,7 @@ import {CommonModule} from "@angular/common";
 import { CsvComponent } from './csv/csv.component';
 import {FormsModule} from "@angular/forms";
 import { CanvasChartLiveComponent } from './canvas-chart-live/canvas-chart-live.component';
-import { CanvasChartSingleComponent } from './canvas-chart-single/canvas-chart-single.component';
+//import { CanvasChartSingleComponent } from './canvas-chart-single/canvas-chart-single.component';
 import { StartPageComponent } from './start-page/start-page.component';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
@@ -21,7 +21,7 @@ var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
     CanvasJSChart,
     CsvComponent,
     CanvasChartLiveComponent,
-    CanvasChartSingleComponent,
+   // CanvasChartSingleComponent,
     StartPageComponent
   ],
   imports: [
