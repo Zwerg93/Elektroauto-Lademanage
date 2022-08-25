@@ -22,6 +22,7 @@
     <input [(ngModel)]="dateEnd1" type="date">
     <input [(ngModel)]="timeEnd1" type="time">
     <button (click)="routeToAll()">Alle Diagramme</button>
+    <div *ngIf="error1" [innerHTML]="errorMessage1"></div>
   </div>
   <div class="startOptions">
     <h2>Ein Diagramm</h2>
@@ -35,11 +36,13 @@
     <label>Name</label>
     <input [(ngModel)]="dataName2">
     <button (click)="routeToOne()">Ein Diagramm</button>
+    <div *ngIf="error2" [innerHTML]="errorMessage2"></div>
   </div>
   <div class="startOptions">
     <h2>Live Diagramm</h2>
     <input [(ngModel)]="dataName4">
     <button (click)="routeToLive()">Live Diagramm</button>
+    <div *ngIf="error4" [innerHTML]="errorMessage4"></div>
   </div>
   <div class="startOptions">
     <h2>CSV File generieren</h2>
@@ -50,22 +53,18 @@
     <label>End Zeitraum</label>
     <input [(ngModel)]="dateEnd3" type="date">
     <input [(ngModel)]="timeEnd3" type="time">
-    <label>filepath</label>
-    <input [(ngModel)]="filepath3" >
     <label>nur ein Datenpunkt: </label>
     <input (change)="showNameField(($event))" type="checkbox">
     <label *ngIf="showField3">Name des Datenpunkts:</label>
     <input *ngIf="showField3" [(ngModel)]="dataName3">
+    <button (click)="generateCSV()" >CSV File generieren</button>
+    <div *ngIf="error3" [innerHTML]="errorMessage3"></div>
+    <a href="http://localhost:8081/logEntry/download/" download="monitor.csv"><button>Download</button></a>
 
-    <a href="http://localhost:8081/logEntry/download/" download="monitor.csv"><button (click)="generateCSV()" >CSV File generieren</button></a>
 
   </div>
 
 </div>
-<a href="http://localhost:8081/logEntry/download/"
-   download="monitor.csv">
-  Download ZSV
-</a>
 
 </body>
 </html>

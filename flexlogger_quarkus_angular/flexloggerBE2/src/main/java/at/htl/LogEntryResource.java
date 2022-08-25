@@ -45,7 +45,7 @@ public class LogEntryResource {
     }
 
     @GET
-    @Path("/csv/{startDate}/{endDate}/{startTime}/{endTime}/{filepath : .*}")
+    @Path("/csv/{startDate}/{endDate}/{startTime}/{endTime}/{filepath : .*}/all")
     public void getCSV(@PathParam("startDate") String startDate, @PathParam("endDate") String endDate, @PathParam("startTime") String startTime, @PathParam("endTime") String endTime, @PathParam("filepath") String filepath) throws IOException {
         elr.getCSVall(startDate, endDate, startTime, endTime, filepath);
     }

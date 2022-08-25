@@ -133,7 +133,7 @@ public class LogEntryRepository {
 
     //********* CSV
     public void getCSVall(String startDate, String endDate, String startTime, String endTime, String filePath) throws IOException {
-        Set<LogEntry> logEntrySet = getAll(startDate, endDate, startTime, endTime);
+        Set<LogEntry> logEntrySet = getAll(startDate, startTime, endDate, endTime);
         Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
         writeToCsvFile(stringSet, new File(filePath));
     }
