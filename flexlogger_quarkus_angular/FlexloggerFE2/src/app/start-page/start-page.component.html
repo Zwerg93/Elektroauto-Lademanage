@@ -32,6 +32,8 @@
     <label>End Zeitraum</label>
     <input [(ngModel)]="dateEnd2" type="date">
     <input [(ngModel)]="timeEnd2" type="time">
+    <label>Name</label>
+    <input [(ngModel)]="dataName2">
     <button (click)="routeToOne()">Ein Diagramm</button>
   </div>
   <div class="startOptions">
@@ -54,11 +56,16 @@
     <input (change)="showNameField(($event))" type="checkbox">
     <label *ngIf="showField3">Name des Datenpunkts:</label>
     <input *ngIf="showField3" [(ngModel)]="dataName3">
-    <button (click)="generateCSV()">CSV File generieren</button>
+
+    <a href="http://localhost:8081/logEntry/download/" download="monitor.csv"><button (click)="generateCSV()" >CSV File generieren</button></a>
 
   </div>
 
 </div>
+<a href="http://localhost:8081/logEntry/download/"
+   download="monitor.csv">
+  Download ZSV
+</a>
 
 </body>
 </html>

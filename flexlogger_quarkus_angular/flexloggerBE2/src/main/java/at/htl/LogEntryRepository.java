@@ -114,7 +114,7 @@ public class LogEntryRepository {
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
-                    System.out.println(rs.getString("dp_name"));
+                    //System.out.println(rs.getString("dp_name"));
                     logEntry = new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp"));
                 }
                 //rs.close();
@@ -139,7 +139,7 @@ public class LogEntryRepository {
     }
 
     public void getCSVbyName(String startDate, String endDate, String startTime, String endTime, String filePath, String name) throws IOException {
-        Set<LogEntry> logEntrySet = getByName(startDate, endDate, startTime, endTime, name);
+        Set<LogEntry> logEntrySet = getByName(name, startDate, endDate, startTime, endTime);
         Stream<String> stringSet = logEntrySet.stream().map(logEntry -> logEntry.toString());
         writeToCsvFile(stringSet, new File(filePath));
     }
@@ -194,12 +194,13 @@ public class LogEntryRepository {
         return id;
     }
 
-    public Set<LogEntry> getByName(String dateStart, String dateEnd, String timeStart, String timeEnd, String dpName) {
+    public Set<LogEntry> getByName( String dpName,String dateStart, String dateEnd, String timeStart, String timeEnd) {
         Set<LogEntry> logEntries = Collections.newSetFromMap(Collections.synchronizedMap(new LinkedHashMap<>()));
 
         long startMillis = convertToMillis(dateStart, timeStart);
+        System.out.println(startMillis);
         long endMillis = convertToMillis(dateEnd, timeEnd);
-
+        System.out.println(endMillis);
         String sql = "SELECT * FROM flexlogger WHERE dp_name = ? AND timestamp > ? AND timestamp < ? order by timestamp";
 
 
@@ -213,7 +214,7 @@ public class LogEntryRepository {
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
-                    System.out.println(rs.getString("dp_name"));
+                    //System.out.println(rs.getString("timestamp"));
                     logEntries.add(new LogEntry(rs.getString("dp_name"), rs.getString("value"), rs.getString("unit"), rs.getLong("timestamp")));
                 }
                 //rs.close();

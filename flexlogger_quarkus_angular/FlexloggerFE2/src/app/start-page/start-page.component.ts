@@ -18,6 +18,7 @@ export class StartPageComponent implements OnInit {
   timeBegin2: any;
   dateEnd2: any;
   timeEnd2: any;
+  dataName2: any;
   dateBegin3: any;
   timeBegin3: any;
   dateEnd3: any;
@@ -39,7 +40,7 @@ export class StartPageComponent implements OnInit {
   }
 
   routeToOne() {
-    this.router.navigate(['one'], {relativeTo: this.route});
+    this.router.navigate(['one/'+ this.dataName2+ "/"+ this.dateBegin2 + '/' + this.timeBegin2 + '/' + this.dateEnd2 + '/' + this.timeEnd2], {relativeTo: this.route});
   }
 
   routeToLive() {
@@ -48,12 +49,12 @@ export class StartPageComponent implements OnInit {
 
   generateCSV() {
     if (this.dataName3 == undefined) {
-      //this.http.createCSV(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv").subscribe(value => {}, error => console.log(error));
+      this.http.createCSV(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv").subscribe(value => {}, error => console.log(error));
       this.http.downloadCSV().subscribe(value => {}, error => console.log(error));
     } else {
-      //this.http.createCSVByName(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv", this.dataName3).subscribe(value => {}, error => console.log(error));
-      console.log("oki");
-      this.http.downloadCSV().subscribe(value => {}, error => console.log(error));
+      this.http.createCSVByName(this.dateBegin3, this.dateEnd3, this.timeBegin3, this.timeEnd3, this.filepath3 + "/monitor.csv", this.dataName3).subscribe(value => {}, error => console.log(error));
+      //console.log("oki");
+      //this.http.downloadCSV().subscribe(value => {}, error => console.log(error));
     }
 
 

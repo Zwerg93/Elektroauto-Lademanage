@@ -31,10 +31,10 @@ public class LogEntryResource {
     }
 
     @GET
-    @Path("/name/{name}")
+    @Path("/name/{name}/{startDate}/{endDate}/{startTime}/{endTime}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<LogEntry> getByName(@PathParam("name") String name) {
-        return elr.getByName("2022-08-23", "2022-08-23", "13:41", "13:43", "REAL173");
+    public Set<LogEntry> getByName(@PathParam("name") String name, @PathParam("startDate") String startDate, @PathParam("endDate") String endDate, @PathParam("startTime") String startTime, @PathParam("endTime") String endTime) {
+        return elr.getByName(name, startDate, endDate, startTime, endTime);
     }
 
     @GET
@@ -68,7 +68,7 @@ public class LogEntryResource {
     @Produces({"text/csv"})
     public Response downloadFile() {
         String fileName = "monitor.csv";
-        String path = "/home/marcel/Desktop" + fileName;
+        String path = "c:\\angular1\\" + fileName;
         File audioFile = new File(path);
         if (!audioFile.exists()) {
             throw new RuntimeException("File not found: " +  fileName);

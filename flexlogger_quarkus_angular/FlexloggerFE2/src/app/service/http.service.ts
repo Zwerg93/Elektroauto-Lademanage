@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {LogEntry} from "../model/LogEntry";
 
 @Injectable({
@@ -16,8 +16,8 @@ export class HttpService {
     return this.http.get<LogEntry[]>(this.url + "/all/" + startDate + "/" + startTime + "/" + endDate+ "/" + endTime);
   }
 
-  public getLogEntriesByName(name: string): Observable<LogEntry[]>{
-    return this.http.get<LogEntry[]>(this.url + "/name/" + name);
+  public getLogEntriesByName(name: string, startDate: string, startTime: string, endDate: string, endTime: string): Observable<LogEntry[]>{
+    return this.http.get<LogEntry[]>(this.url + "/name/" + name + "/" + startDate + "/" + endDate + "/" + startTime+ "/" + endTime);
   }
 
   public getCurrentLogEntry(name: string): Observable<LogEntry>{
@@ -33,8 +33,10 @@ export class HttpService {
   }
 
   public downloadCSV(){
-    return this.http.get(this.url + "/download/");
+    return this.http.get(this.url + "/download/", { responseType: 'text' });
   }
+
+
 
 
 
