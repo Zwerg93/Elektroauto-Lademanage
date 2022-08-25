@@ -7,11 +7,11 @@ import { CanvasChartComponent } from './canvas-chart/canvas-chart.component';
 import * as CanvasJSAngularChart from '../assets/canvasjs.angular.component';
 import {HttpClientModule} from "@angular/common/http";
 import {CommonModule} from "@angular/common";
-import { CsvComponent } from './csv/csv.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { CanvasChartLiveComponent } from './canvas-chart-live/canvas-chart-live.component';
 import { CanvasChartSingleComponent } from './canvas-chart-single/canvas-chart-single.component';
 import { StartPageComponent } from './start-page/start-page.component';
+import { HomeComponent } from './home/home.component';
 var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
 
 @NgModule({
@@ -19,18 +19,18 @@ var CanvasJSChart = CanvasJSAngularChart.CanvasJSChart;
     AppComponent,
     CanvasChartComponent,
     CanvasJSChart,
-    CsvComponent,
     CanvasChartLiveComponent,
     CanvasChartSingleComponent,
-    StartPageComponent
+    StartPageComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-
     HttpClientModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

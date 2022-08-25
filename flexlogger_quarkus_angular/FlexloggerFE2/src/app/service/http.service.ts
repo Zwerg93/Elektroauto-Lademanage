@@ -20,12 +20,12 @@ export class HttpService {
     return this.http.get<LogEntry[]>(this.url + "/name/" + name + "/" + startDate + "/" + endDate + "/" + startTime+ "/" + endTime);
   }
 
-  public getCurrentLogEntry(name: string): Observable<LogEntry>{
-    return this.http.get<LogEntry>(this.url + "/currentName/" + name);
+  public getCurrentLogEntry(name: string): Observable<LogEntry[]>{
+    return this.http.get<LogEntry[]>(this.url + "/currentName/" + name);
   }
 
   public createCSV(startDate: string, endDate: string, startTime: string, endTime: string, filename: string){
-    return this.http.get<LogEntry[]>(this.url + "/csv/" + startDate + "/" + endDate + "/" + startTime + "/" + endTime + "/" + filename);
+    return this.http.get<LogEntry[]>(this.url + "/csv/" + startDate + "/" + endDate + "/" + startTime + "/" + endTime + "/" + filename + "/all");
   }
 
   public createCSVByName(startDate: string, endDate: string, startTime: string, endTime: string, filename: string, name: string){

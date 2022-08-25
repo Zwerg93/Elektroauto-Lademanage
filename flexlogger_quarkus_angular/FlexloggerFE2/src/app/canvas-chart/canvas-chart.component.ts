@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpService} from "../service/http.service";
 import {LogEntry} from "../model/LogEntry";
 import {of, timer} from "rxjs";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-canvas-chart',
@@ -22,22 +22,33 @@ export class CanvasChartComponent implements OnInit {
   listOfDatapointNames: string[] = [];
   showChart: Boolean = false;
   chart: any;
+  error: any;
+  errorMessage: string = "";
+  interval: any;
 
 
-  //files: { data: { color: string; dataPoints: { x: Date; y: number }[]; type: string }[]; axisY: { title: string; suffix: string; valueFormatString: string }; title: { text: string }; animationEnabled: boolean } = [];
+    //files: { data: { color: string; dataPoints: { x: Date; y: number }[]; type: string }[]; axisY: { title: string; suffix: string; valueFormatString: string }; title: { text: string }; animationEnabled: boolean } = [];
 
-  constructor(private http: HttpService, private route: ActivatedRoute) {
+  constructor(private http: HttpService, private route: ActivatedRoute, private router: Router) {
+    // Daten werden aus Datenbank geladen
     this.onload();
-
+    // Nach 1 Sekunde werden die anderen Methoden aufgerufen, um zu verhindern, dass die Daten nicht vollständig geladen haben
     timer(1000).subscribe(x => {
+      // getFiles() gibt die Liste zurück
       this.getFiles().subscribe(file => {
         this.logLines = file;
-        this.getListOfDatapointNames();
-        this.filterLogLines("REAL173");
-        this.setChartOptions();
-        this.showChart = true;
-        //this.getData();
-        this.setTimerForNewData();
+        if(this.logLines.length != 0){
+          this.getListOfDatapointNames();
+          this.changeData(this.logLines[0].dpId);
+          this.setChartOptions();
+          this.showChart = true;
+          //this.getData();
+          this.setTimerForNewData();
+        } else {
+          this.errorMessage = "Zu Ihrem ausgewählten Zeitpunkt wurden keine Daten gefunden.";
+          this.error = true;
+        }
+
       })
     })
   }
@@ -45,6 +56,7 @@ export class CanvasChartComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // Daten werden aus Datenkbank geladen
   onload() {
     this.dateBegin = this.route.snapshot.params['dateBegin'];
     this.timeBegin = this.route.snapshot.params['timeBegin'];
@@ -55,6 +67,7 @@ export class CanvasChartComponent implements OnInit {
     }, error => console.log(error));
   }
 
+  /*
   loadDynamicData() {
     this.onload();
 
@@ -66,31 +79,28 @@ export class CanvasChartComponent implements OnInit {
       })
     })
   }
+  */
 
+  // Fügt neue Datenpunkte in Datenarray ein
   setTimerForNewData() {
-    timer(50, 50).subscribe(x => {
+    this.interval = timer(50, 50).subscribe(x => {
       this.dynamicCount += 1;
       this.setChartOptions();
 
-      // var length = chart.options.data[0].dataPoints.length;
-
-
-      this.chartOptions.title.text = this.dynamicLogLines[this.dynamicCount].dpId;
-      console.log("test add new DP")
-      console.log(this.dynamicLogLines[this.dynamicCount].timeStamp)
-
-      this.chartOptions.data[0].dataPoints.push({
-        x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp),
-        y: parseFloat(this.dynamicLogLines[this.dynamicCount].value)
-      });
-      //console.log( this.chartOptions.data[0].dataPoints);
-
+      // Überprüfung wenn Datenpunkt undefined is, da in dem Fall Fehlermeldung auftreten würde
+      if(this.dynamicLogLines[this.dynamicCount] != undefined){
+        this.chartOptions.title.text = this.dynamicLogLines[this.dynamicCount].dpId;
+        this.chartOptions.data[0].dataPoints.push({
+          x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp),
+          y: parseFloat(this.dynamicLogLines[this.dynamicCount].value)
+        });
+      }
     })
 
   }
 
-
-  filterLogLines(filterString: String) {
+  // wird Anfangs initialisiert und wenn Button gedrückt wird, wird nochmal aufgerufen, um neue Daten einzufügen
+  changeData(filterString: String) {
     this.dynamicCount = 0;
     this.dynamicLogLines = [];
     for (let logLine of this.logLines) {
@@ -102,6 +112,7 @@ export class CanvasChartComponent implements OnInit {
     this.chartOptions.data[0].dataPoints = [ {x: new Date(this.dynamicLogLines[this.dynamicCount].timeStamp), y: parseInt(this.dynamicLogLines[this.dynamicCount].value)}];
   }
 
+  // Erstellt Buttons mit den Namen darauf
   getListOfDatapointNames() {
     let nameInList = false;
     this.listOfDatapointNames = [];
@@ -124,10 +135,12 @@ export class CanvasChartComponent implements OnInit {
   }
 
 
+  // returnt this.logLines
   getFiles() {
     return of(this.logLines);
   }
 
+  // setzt die Chart Options
   chartOptions = {
     animationEnabled: true,
     title: {
@@ -147,7 +160,7 @@ export class CanvasChartComponent implements OnInit {
   }
 
 
-
+  // setzt die Chart Options neu mit dynamischen Daten
   setChartOptions() {
     this.chartOptions = {
       animationEnabled: true,
@@ -156,7 +169,7 @@ export class CanvasChartComponent implements OnInit {
       },
       axisY: {
         title: "Value",
-        suffix: this.dynamicLogLines[0].unit
+        suffix: " " + this.dynamicLogLines[0].unit
       },
 
       data: [{
@@ -167,5 +180,13 @@ export class CanvasChartComponent implements OnInit {
     }
   }
 
+  // route to Homepage
+  routeToHome() {
+    // Timer stoppen, damit keine weiteren Daten in Array geschrieben werden, obwohl man sich nicht mehr auf Seite befindet
+    if(this.interval != undefined) {
+      this.interval.unsubscribe();
+    }
+    this.router.navigate([''], {relativeTo: this.route});
+  }
 
 }

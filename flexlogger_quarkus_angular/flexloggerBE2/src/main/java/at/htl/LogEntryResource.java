@@ -40,7 +40,7 @@ public class LogEntryResource {
     @GET
     @Path("/currentName/{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public LogEntry getCurrentName(@PathParam("name") String name) {
+    public Set<LogEntry> getCurrentName(@PathParam("name") String name) {
         return elr.getCurrentByName(name);
     }
 
