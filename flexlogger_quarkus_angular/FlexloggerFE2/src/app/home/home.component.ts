@@ -58,7 +58,9 @@ export class HomeComponent implements OnInit {
         dataName3: ['', []]
       },
       {
-        validator: [this.validator.match('dateBegin3','timeBegin3', 'dateEnd3', 'timeEnd3'), this.validator.csvValidator('dateBegin3','timeBegin3', 'dateEnd3', 'timeEnd3', 'dataName3')]
+        validator: [this.validator.match('dateBegin3','timeBegin3', 'dateEnd3', 'timeEnd3')
+          //, this.validator.csvValidator('dateBegin3','timeBegin3', 'dateEnd3', 'timeEnd3', 'dataName3')
+        ]
       });
   }
 
@@ -72,15 +74,51 @@ export class HomeComponent implements OnInit {
   }
 
 
+  // AUSPROBIEREN
   generateCSV() {
-    if (this.csvForm.value.dataName3 == "") {
-      this.http.createCSV(this.csvForm.value.dateBegin3, this.csvForm.value.dateEnd3, this.csvForm.value.timeBegin3, this.csvForm.value.timeEnd3, "C:/angular1/monitor.csv").subscribe(value => {
-      }, error => console.log(error));
-    } else {
-      this.http.createCSVByName(this.csvForm.value.dateBegin3, this.csvForm.value.dateEnd3, this.csvForm.value.timeBegin3, this.csvForm.value.timeEnd3, "C:/angular1/monitor.csv", this.csvForm.value.dataName3).subscribe(value => {
-      }, error => console.log(error));
+    if(this.checkCSV()) {
+      if (this.csvForm.value.dataName3 == "") {
+        this.csvForm.setErrors(null);
+        this.http.createCSV(this.csvForm.value.dateBegin3, this.csvForm.value.dateEnd3, this.csvForm.value.timeBegin3, this.csvForm.value.timeEnd3, "C:/angular1/monitor.csv").subscribe(value => {
+        }, error => console.log(error));
+      } else {
+        this.http.createCSVByName(this.csvForm.value.dateBegin3, this.csvForm.value.dateEnd3, this.csvForm.value.timeBegin3, this.csvForm.value.timeEnd3, "C:/angular1/monitor.csv", this.csvForm.value.dataName3).subscribe(value => {
+        }, error => console.log(error));
+      }
+    }  else {
+      this.csvForm.controls['dataName3'].setErrors({noValues: true});
     }
   }
+
+  checkCSV(): Boolean{
+    let csvValue = [];
+    this.http.getLogEntries(this.csvForm.value.dateBegin3, this.csvForm.value.timeBegin3, this.csvForm.value.dateEnd3, this.csvForm.value.timeEnd3).subscribe(value => {
+     csvValue = value;
+      console.log(value.length);
+    }, error => {
+      console.log(error);
+    });
+    if(csvValue.length == 0){
+      return false;
+    }
+    return true;
+    /*
+    let check = true;
+    this.http.getLogEntries(this.csvForm.value.dateBegin3, this.csvForm.value.timeBegin3, this.csvForm.value.dateEnd3, this.csvForm.value.timeEnd3).subscribe(value => {
+      let csvValue = value;
+      if(csvValue.length == 0){
+        check = false;
+      }
+    }, error => {
+      console.log(error);
+    });
+    return check;
+    */
+  }
+
+
+
+  // AUSPROBIEREN ENDE
 
   showNameField(event: any) {
     if (event.target.checked) {

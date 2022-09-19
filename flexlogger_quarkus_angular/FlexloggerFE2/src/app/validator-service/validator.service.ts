@@ -53,7 +53,7 @@ export class ValidatorService {
       // TODO
       // erst überprüfen wenn button gedrückt wird und nicht scho n vorher, da sonst buggy
       //if(nameControl.value == "" && this.homeComponent.showField == false){
-        if(nameControl.value == ""){
+      if (nameControl.value == "") {
         this.http.getLogEntries(dateBeginControl.value, timeBeginControl.value, dateEndControl.value, timeEndControl.value).subscribe(value => {
           this.csvValue = value;
         }, error => {
