@@ -23,6 +23,12 @@
     </form>
 
     <button [disabled]="!allForm.valid" (click)="routeToAll()">Alle Diagramme</button>
+    <div *ngIf="getAllFormControl['dateEnd1'].invalid" class="alert alert-danger">
+      <div *ngIf="getAllFormControl['dateEnd1'].errors && getAllFormControl['dateEnd1'].errors['dateMustBeBigger']">Startdatum darf nicht nach Endzeit liegen!</div>
+    </div>
+    <div *ngIf="getAllFormControl['dateBegin1'].invalid" class="alert alert-danger">
+      <div *ngIf="getAllFormControl['dateBegin1'].errors && getAllFormControl['dateBegin1'].errors['timeMustBeBigger']">Startzeit darf nicht nach Endzeit liegen!</div>
+    </div>
   </div>
 
   <div class="startOptions">
@@ -39,12 +45,22 @@
       <input formControlName="dataName2">
     </form>
     <button [disabled]="!oneForm.valid" (click)="routeToOne()">Ein Diagramme</button>
+    <div *ngIf="getOneFormControl['dataName2'].touched && getOneFormControl['dataName2'].invalid" class="alert alert-danger">
+      <div *ngIf="getOneFormControl['dataName2'].errors && getOneFormControl['dataName2'].errors['required']">Bitte füllen Sie einen Namen ein.</div>
+    </div>
+    <div *ngIf="getOneFormControl['dateEnd2'].invalid" class="alert alert-danger">
+      <div *ngIf="getOneFormControl['dateEnd2'].errors && getOneFormControl['dateEnd2'].errors['dateMustBeBigger']">Startdatum darf nicht nach Endzeit liegen!</div>
+    </div>
+    <div *ngIf="getOneFormControl['dateBegin2'].invalid" class="alert alert-danger">
+      <div *ngIf="getOneFormControl['dateBegin2'].errors && getOneFormControl['dateBegin2'].errors['timeMustBeBigger']">Startzeit darf nicht nach Endzeit liegen!</div>
+    </div>
   </div>
+
 
   <div >
     <h2>CSV File generieren</h2>
     <p>Zeitraum</p>
-    <form [formGroup]="formCSV" class="startOptions">
+    <form [formGroup]="csvForm" class="startOptions">
       <label>Anfangs Zeitraum</label>
       <input formControlName="dateBegin3" type="date">
       <input formControlName="timeBegin3" type="time">
@@ -56,8 +72,20 @@
       <label *ngIf="showField">Name des Datenpunkts:</label>
       <input *ngIf="showField" formControlName="dataName3">
     </form>
-    <button (click)="generateCSV()" >CSV File generieren</button>
+    <button [disabled]="!csvForm.valid" (click)="generateCSV()" >CSV File generieren</button>
     <a href="http://localhost:8081/logEntry/download/" download="monitor.csv"><button>Download</button></a>
+    <div *ngIf="getCsvFormControl['dataName3'].touched && getCsvFormControl['dataName3'].invalid" class="alert alert-danger">
+      <div *ngIf="getCsvFormControl['dataName3'].errors && getCsvFormControl['dataName3'].errors['required']">Bitte füllen Sie einen Namen ein.</div>
+    </div>
+    <div *ngIf="getCsvFormControl['dateEnd3'].invalid" class="alert alert-danger">
+      <div *ngIf="getCsvFormControl['dateEnd3'].errors && getCsvFormControl['dateEnd3'].errors['dateMustBeBigger']">Startdatum darf nicht nach Endzeit liegen!</div>
+    </div>
+    <div *ngIf="getCsvFormControl['dateBegin3'].invalid" class="alert alert-danger">
+      <div *ngIf="getCsvFormControl['dateBegin3'].errors && getCsvFormControl['dateBegin3'].errors['timeMustBeBigger']">Startzeit darf nicht nach Endzeit liegen!</div>
+    </div>
+    <div *ngIf="getCsvFormControl['dataName3'].invalid" class="alert alert-danger">
+      <div *ngIf="getCsvFormControl['dataName3'].errors && getCsvFormControl['dataName3'].errors['noValues']">Ihre Auswahl enthält keine Daten!</div>
+    </div>
   </div>
 </div>
 </body>

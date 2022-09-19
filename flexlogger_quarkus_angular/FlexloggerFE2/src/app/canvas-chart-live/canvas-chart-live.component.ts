@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpService} from "../service/http.service";
+import {HttpService} from "../http-service/http.service";
 import {LogEntry} from "../model/LogEntry";
 import {ActivatedRoute, Router} from "@angular/router";
 import {of, timer, Timestamp} from "rxjs";

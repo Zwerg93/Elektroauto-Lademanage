@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpService} from "../service/http.service";
+import {HttpService} from "../http-service/http.service";
 import {LogEntry} from "../model/LogEntry";
 import {of, timer} from "rxjs";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -37,6 +37,7 @@ export class CanvasChartComponent implements OnInit {
       // getFiles() gibt die Liste zurück
       this.getFiles().subscribe(file => {
         this.logLines = file;
+        console.log(this.logLines);
         if(this.logLines.length != 0){
           this.getListOfDatapointNames();
           this.changeData(this.logLines[0].dpId);

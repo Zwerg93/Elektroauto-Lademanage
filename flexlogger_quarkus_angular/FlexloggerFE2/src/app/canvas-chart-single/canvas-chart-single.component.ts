@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpService} from "../service/http.service";
+import {HttpService} from "../http-service/http.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {of, timer} from "rxjs";
 import {LogEntry} from "../model/LogEntry";
@@ -15,6 +15,7 @@ export class CanvasChartSingleComponent implements OnInit {
   timeBegin: any;
   dateEnd: any;
   timeEnd: any;
+  dataName: any;
   logLines: LogEntry[] = [];
   dynamicCount: number = 0;
   dynamicLogLines: LogEntry[] = [];
@@ -58,7 +59,8 @@ export class CanvasChartSingleComponent implements OnInit {
     this.timeBegin = this.route.snapshot.params['timeBegin'];
     this.dateEnd = this.route.snapshot.params['dateEnd'];
     this.timeEnd = this.route.snapshot.params['timeEnd'];
-    this.http.getLogEntries(this.dateBegin, this.timeBegin, this.dateEnd,this.timeEnd).subscribe(value => {
+    this.dataName = this.route.snapshot.params['name'];
+    this.http.getLogEntriesByName(this.dataName, this.dateBegin, this.timeBegin, this.dateEnd,this.timeEnd).subscribe(value => {
       this.logLines = value;
     }, error => console.log(error));
   }

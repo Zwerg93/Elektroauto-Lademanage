@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpService} from "../service/http.service";
+import {HttpService} from "../http-service/http.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, timer} from "rxjs";
-import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-start-page',
